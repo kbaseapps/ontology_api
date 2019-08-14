@@ -338,10 +338,10 @@ class Application(object):
         self.serverlog.set_log_level(6)
         self.rpc_service = JSONRPCServiceCustom()
         self.method_authentication = dict()
-        self.rpc_service.add(impl_OntologyAPI.run_OntologyAPI,
-                             name='OntologyAPI.run_OntologyAPI',
-                             types=[dict])
-        self.method_authentication['OntologyAPI.run_OntologyAPI'] = 'required'  # noqa
+        self.rpc_service.add(impl_OntologyAPI.get_descendants,
+                             name='OntologyAPI.get_descendants',
+                             types=[str])
+        self.method_authentication['OntologyAPI.get_descendants'] = 'optional'  # noqa
         self.rpc_service.add(impl_OntologyAPI.status,
                              name='OntologyAPI.status',
                              types=[dict])

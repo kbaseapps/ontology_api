@@ -3,14 +3,18 @@ A KBase module: OntologyAPI
 */
 
 module OntologyAPI {
-    typedef structure {
-        string report_name;
-        string report_ref;
-    } ReportResults;
+    
+    /* A boolean. 0 = false, other = true. */
+    typedef int boolean;
+    
+    /* GoID : Unique GO term id (Source: external Gene Ontology database - http://www.geneontology.org/) */
+    typedef string GoID;
 
-    /*
-        This example function accepts any number of parameters and returns results in a KBaseReport
-    */
-    funcdef run_OntologyAPI(mapping<string,UnspecifiedObject> params) returns (ReportResults output) authentication required;
+    typedef list<GoID> GoIDList;
 
+    /**
+     * Retrieve descendants
+     * @return descendants
+     */
+    funcdef get_descendants(GoID) returns (GoIDList) authentication optional;
 };

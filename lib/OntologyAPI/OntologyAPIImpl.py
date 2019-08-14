@@ -23,8 +23,8 @@ class OntologyAPI:
     # the latter method is running.
     ######################################### noqa
     VERSION = "0.0.1"
-    GIT_URL = ""
-    GIT_COMMIT_HASH = ""
+    GIT_URL = "git@github.com:zhlu9890/ontology_api.git"
+    GIT_COMMIT_HASH = "58bc68de62ca71d1c6b4e52e9275d6742bd86ba7"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -41,32 +41,29 @@ class OntologyAPI:
         pass
 
 
-    def run_OntologyAPI(self, ctx, params):
+    def get_descendants(self, ctx, GoID):
         """
-        This example function accepts any number of parameters and returns results in a KBaseReport
-        :param params: instance of mapping from String to unspecified object
-        :returns: instance of type "ReportResults" -> structure: parameter
-           "report_name" of String, parameter "report_ref" of String
+        Retrieve descendants
+        @return descendants
+        :param GoID: instance of type "GoID" (GoID : Unique GO term id
+           (Source: external Gene Ontology database -
+           http://www.geneontology.org/))
+        :returns: instance of type "GoIDList" -> list of type "GoID" (GoID :
+           Unique GO term id (Source: external Gene Ontology database -
+           http://www.geneontology.org/))
         """
         # ctx is the context object
-        # return variables are: output
-        #BEGIN run_OntologyAPI
-        report = KBaseReport(self.callback_url)
-        report_info = report.create({'report': {'objects_created':[],
-                                                'text_message': params['parameter_1']},
-                                                'workspace_name': params['workspace_name']})
-        output = {
-            'report_name': report_info['name'],
-            'report_ref': report_info['ref'],
-        }
-        #END run_OntologyAPI
+        # return variables are: returnVal
+        #BEGIN get_descendants
+        #END get_descendants
 
         # At some point might do deeper type checking...
-        if not isinstance(output, dict):
-            raise ValueError('Method run_OntologyAPI return value ' +
-                             'output is not type dict as required.')
+        if not isinstance(returnVal, list):
+            raise ValueError('Method get_descendants return value ' +
+                             'returnVal is not type list as required.')
         # return the results
-        return [output]
+        return [returnVal]
+
     def status(self, ctx):
         #BEGIN_STATUS
         returnVal = {'state': "OK",
