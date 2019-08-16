@@ -1,11 +1,15 @@
 """Exception classes."""
+from pprint import pprint
 
-
-class InvalidParams(Exception):
+class Error(Exception):
+    """Base class for exceptions in this module."""
     pass
 
+class InvalidParamsError(Error):
+    def __init__(self, message):
+        self.message = message
 
-class REError(Exception):
+class REError(Error):
     """Error from the RE API."""
 
     def __init__(self, resp):

@@ -7,6 +7,7 @@ from configparser import ConfigParser
 from OntologyAPI.OntologyAPIImpl import OntologyAPI
 from OntologyAPI.OntologyAPIServer import MethodContext
 from OntologyAPI.authclient import KBaseAuth as _KBaseAuth
+from OntologyAPI.exceptions import InvalidParamsError, REError
 
 from installed_clients.WorkspaceClient import Workspace
 
@@ -53,15 +54,12 @@ class OntologyAPITest(unittest.TestCase):
             print('Test workspace was deleted')
 
     # NOTE: According to Python unittest naming rules test method names should start from 'test'. # noqa
-    def test_your_method(self):
-        # Prepare test objects in workspace if needed using
-        # self.getWsClient().save_objects({'workspace': self.getWsName(),
-        #                                  'objects': []})
-        #
-        # Run your method by
-        # ret = self.getImpl().your_method(self.getContext(), parameters...)
-        #
-        # Check returned data with
-        # self.assertEqual(ret[...], ...) or other unittest methods
-        ret = self.serviceImpl.run_OntologyAPI(self.ctx, {'workspace_name': self.wsName,
-                                                             'parameter_1': 'Hello World!'})
+    def test_get_descendants(self):
+        ret = self.serviceImpl.get_descendants(self.ctx, {"key": "GO:0000002"})
+        self.assertEqual(ret[0], ["GO:0033955"])
+        with self.assertRaises(InvalidParamsError):
+            self.serviceImpl.get_descendants(self.ctx, {"id": "GO:0000002"})
+
+    def test_get_ancestors(self):
+        ret = self.serviceImpl.get_ancestors(self.ctx, {"key": "GO:0000002"})
+        self.assertEqual(ret[0], ['GO:0006996', 'GO:0007005', 'GO:0008150','GO:0008150','GO:0009987', 'GO:0016043', 'GO:0071840'])

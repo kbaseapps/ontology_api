@@ -340,8 +340,12 @@ class Application(object):
         self.method_authentication = dict()
         self.rpc_service.add(impl_OntologyAPI.get_descendants,
                              name='OntologyAPI.get_descendants',
-                             types=[str])
+                             types=[dict])
         self.method_authentication['OntologyAPI.get_descendants'] = 'optional'  # noqa
+        self.rpc_service.add(impl_OntologyAPI.get_ancestors,
+                             name='OntologyAPI.get_ancestors',
+                             types=[dict])
+        self.method_authentication['OntologyAPI.get_ancestors'] = 'optional'  # noqa
         self.rpc_service.add(impl_OntologyAPI.status,
                              name='OntologyAPI.status',
                              types=[dict])
