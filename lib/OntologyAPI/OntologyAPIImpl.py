@@ -28,7 +28,7 @@ class OntologyAPI:
     ######################################### noqa
     VERSION = "0.0.1"
     GIT_URL = "git@github.com:zhlu9890/ontology_api.git"
-    GIT_COMMIT_HASH = "0a3ef09a47d278c10b9a02234ec7358ad031392d"
+    GIT_COMMIT_HASH = "aadeacbfab28e464aa6cb7034e77288b897ecbcd"
 
     #BEGIN_CLASS_HEADER
     def validate_params(self, params, schema=None):
@@ -80,7 +80,7 @@ class OntologyAPI:
         validated_params=self.validate_params(InputParams);
         results = re_api.query("GO_get_descendants", validated_params)
 
-        returnVal=list(map(lambda x: x["term"]["_key"] ,results["results"]))
+        returnVal=list(map(lambda x: x["term"]["_key"], results["results"]))
         #END get_descendants
 
         # At some point might do deeper type checking...
@@ -108,12 +108,264 @@ class OntologyAPI:
         validated_params=self.validate_params(InputParams);
         results = re_api.query("GO_get_ancestors", validated_params)
 
-        returnVal=list(map(lambda x: x["term"]["_key"] ,results["results"]))
+        returnVal=list(map(lambda x: x["term"]["_key"], results["results"]))
         #END get_ancestors
 
         # At some point might do deeper type checking...
         if not isinstance(returnVal, list):
             raise ValueError('Method get_ancestors return value ' +
+                             'returnVal is not type list as required.')
+        # return the results
+        return [returnVal]
+
+    def get_children(self, ctx, InputParams):
+        """
+        :param InputParams: instance of type "InputParams" -> structure:
+           parameter "key" of type "GoID" (GoID : Unique GO term id (Source:
+           external Gene Ontology database - http://www.geneontology.org/)),
+           parameter "limit" of Long, parameter "offset" of Long
+        :returns: instance of type "GoIDList" -> list of type "GoID" (GoID :
+           Unique GO term id (Source: external Gene Ontology database -
+           http://www.geneontology.org/))
+        """
+        # ctx is the context object
+        # return variables are: returnVal
+        #BEGIN get_children
+        print('Running get_children() with params=')
+        pprint(InputParams)
+        validated_params=self.validate_params(InputParams);
+        results = re_api.query("GO_get_children", validated_params)
+
+        returnVal=list(map(lambda x: x["term"]["_key"], results["results"]))
+        #END get_children
+
+        # At some point might do deeper type checking...
+        if not isinstance(returnVal, list):
+            raise ValueError('Method get_children return value ' +
+                             'returnVal is not type list as required.')
+        # return the results
+        return [returnVal]
+
+    def get_parents(self, ctx, InputParams):
+        """
+        :param InputParams: instance of type "InputParams" -> structure:
+           parameter "key" of type "GoID" (GoID : Unique GO term id (Source:
+           external Gene Ontology database - http://www.geneontology.org/)),
+           parameter "limit" of Long, parameter "offset" of Long
+        :returns: instance of type "GoIDList" -> list of type "GoID" (GoID :
+           Unique GO term id (Source: external Gene Ontology database -
+           http://www.geneontology.org/))
+        """
+        # ctx is the context object
+        # return variables are: returnVal
+        #BEGIN get_parents
+        print('Running get_parents() with params=')
+        pprint(InputParams)
+        validated_params=self.validate_params(InputParams);
+        results = re_api.query("GO_get_parents", validated_params)
+
+        returnVal=list(map(lambda x: x["term"]["_key"], results["results"]))
+        #END get_parents
+
+        # At some point might do deeper type checking...
+        if not isinstance(returnVal, list):
+            raise ValueError('Method get_parents return value ' +
+                             'returnVal is not type list as required.')
+        # return the results
+        return [returnVal]
+
+    def get_related(self, ctx, InputParams):
+        """
+        :param InputParams: instance of type "InputParams" -> structure:
+           parameter "key" of type "GoID" (GoID : Unique GO term id (Source:
+           external Gene Ontology database - http://www.geneontology.org/)),
+           parameter "limit" of Long, parameter "offset" of Long
+        :returns: instance of type "GoIDList" -> list of type "GoID" (GoID :
+           Unique GO term id (Source: external Gene Ontology database -
+           http://www.geneontology.org/))
+        """
+        # ctx is the context object
+        # return variables are: returnVal
+        #BEGIN get_related
+        print('Running get_related() with params=')
+        pprint(InputParams)
+        validated_params=self.validate_params(InputParams);
+        results = re_api.query("GO_get_related", validated_params)
+
+        returnVal=list(map(lambda x: x["term"]["_key"], results["results"]))
+        #END get_related
+
+        # At some point might do deeper type checking...
+        if not isinstance(returnVal, list):
+            raise ValueError('Method get_related return value ' +
+                             'returnVal is not type list as required.')
+        # return the results
+        return [returnVal]
+
+    def get_siblings(self, ctx, InputParams):
+        """
+        :param InputParams: instance of type "InputParams" -> structure:
+           parameter "key" of type "GoID" (GoID : Unique GO term id (Source:
+           external Gene Ontology database - http://www.geneontology.org/)),
+           parameter "limit" of Long, parameter "offset" of Long
+        :returns: instance of type "GoIDList" -> list of type "GoID" (GoID :
+           Unique GO term id (Source: external Gene Ontology database -
+           http://www.geneontology.org/))
+        """
+        # ctx is the context object
+        # return variables are: returnVal
+        #BEGIN get_siblings
+        print('Running get_siblings() with params=')
+        pprint(InputParams)
+        validated_params=self.validate_params(InputParams);
+        results = re_api.query("GO_get_siblings", validated_params)
+
+        returnVal=list(map(lambda x: x, results["results"]))
+        #END get_siblings
+
+        # At some point might do deeper type checking...
+        if not isinstance(returnVal, list):
+            raise ValueError('Method get_siblings return value ' +
+                             'returnVal is not type list as required.')
+        # return the results
+        return [returnVal]
+
+    def get_metadata(self, ctx, InputParams):
+        """
+        :param InputParams: instance of type "InputParams" -> structure:
+           parameter "key" of type "GoID" (GoID : Unique GO term id (Source:
+           external Gene Ontology database - http://www.geneontology.org/)),
+           parameter "limit" of Long, parameter "offset" of Long
+        :returns: instance of type "GoIDList" -> list of type "GoID" (GoID :
+           Unique GO term id (Source: external Gene Ontology database -
+           http://www.geneontology.org/))
+        """
+        # ctx is the context object
+        # return variables are: returnVal
+        #BEGIN get_metadata
+        print('Running get_metadata() with params=')
+        pprint(InputParams)
+        validated_params=self.validate_params(InputParams);
+        results = re_api.query("GO_get_metadata", validated_params)
+
+        returnVal=list(map(lambda x: x["_key"], results["results"]))
+        #END get_metadata
+
+        # At some point might do deeper type checking...
+        if not isinstance(returnVal, list):
+            raise ValueError('Method get_metadata return value ' +
+                             'returnVal is not type list as required.')
+        # return the results
+        return [returnVal]
+
+    def get_hierarchicalAncestors(self, ctx, InputParams):
+        """
+        :param InputParams: instance of type "InputParams" -> structure:
+           parameter "key" of type "GoID" (GoID : Unique GO term id (Source:
+           external Gene Ontology database - http://www.geneontology.org/)),
+           parameter "limit" of Long, parameter "offset" of Long
+        :returns: instance of type "GoIDList" -> list of type "GoID" (GoID :
+           Unique GO term id (Source: external Gene Ontology database -
+           http://www.geneontology.org/))
+        """
+        # ctx is the context object
+        # return variables are: returnVal
+        #BEGIN get_hierarchicalAncestors
+        print('Running get_hierarchicalAncestors() with params=')
+        pprint(InputParams)
+        validated_params=self.validate_params(InputParams);
+        results = re_api.query("GO_get_hierarchicalAncestors", validated_params)
+
+        returnVal=list(map(lambda x: x["term"]["_key"], results["results"]))
+        #END get_hierarchicalAncestors
+
+        # At some point might do deeper type checking...
+        if not isinstance(returnVal, list):
+            raise ValueError('Method get_hierarchicalAncestors return value ' +
+                             'returnVal is not type list as required.')
+        # return the results
+        return [returnVal]
+
+    def get_hierarchicalChildren(self, ctx, InputParams):
+        """
+        :param InputParams: instance of type "InputParams" -> structure:
+           parameter "key" of type "GoID" (GoID : Unique GO term id (Source:
+           external Gene Ontology database - http://www.geneontology.org/)),
+           parameter "limit" of Long, parameter "offset" of Long
+        :returns: instance of type "GoIDList" -> list of type "GoID" (GoID :
+           Unique GO term id (Source: external Gene Ontology database -
+           http://www.geneontology.org/))
+        """
+        # ctx is the context object
+        # return variables are: returnVal
+        #BEGIN get_hierarchicalChildren
+        print('Running get_hierarchicalChildren() with params=')
+        pprint(InputParams)
+        validated_params=self.validate_params(InputParams);
+        results = re_api.query("GO_get_hierarchicalChildren", validated_params)
+
+        returnVal=list(map(lambda x: x["term"]["_key"], results["results"]))
+        #END get_hierarchicalChildren
+
+        # At some point might do deeper type checking...
+        if not isinstance(returnVal, list):
+            raise ValueError('Method get_hierarchicalChildren return value ' +
+                             'returnVal is not type list as required.')
+        # return the results
+        return [returnVal]
+
+    def get_hierarchicalDescendants(self, ctx, InputParams):
+        """
+        :param InputParams: instance of type "InputParams" -> structure:
+           parameter "key" of type "GoID" (GoID : Unique GO term id (Source:
+           external Gene Ontology database - http://www.geneontology.org/)),
+           parameter "limit" of Long, parameter "offset" of Long
+        :returns: instance of type "GoIDList" -> list of type "GoID" (GoID :
+           Unique GO term id (Source: external Gene Ontology database -
+           http://www.geneontology.org/))
+        """
+        # ctx is the context object
+        # return variables are: returnVal
+        #BEGIN get_hierarchicalDescendants
+        print('Running get_hierarchicalDescendants() with params=')
+        pprint(InputParams)
+        validated_params=self.validate_params(InputParams);
+        results = re_api.query("GO_get_hierarchicalDescendants", validated_params)
+
+        returnVal=list(map(lambda x: x["term"]["_key"], results["results"]))
+        #END get_hierarchicalDescendants
+
+        # At some point might do deeper type checking...
+        if not isinstance(returnVal, list):
+            raise ValueError('Method get_hierarchicalDescendants return value ' +
+                             'returnVal is not type list as required.')
+        # return the results
+        return [returnVal]
+
+    def get_hierarchicalParents(self, ctx, InputParams):
+        """
+        :param InputParams: instance of type "InputParams" -> structure:
+           parameter "key" of type "GoID" (GoID : Unique GO term id (Source:
+           external Gene Ontology database - http://www.geneontology.org/)),
+           parameter "limit" of Long, parameter "offset" of Long
+        :returns: instance of type "GoIDList" -> list of type "GoID" (GoID :
+           Unique GO term id (Source: external Gene Ontology database -
+           http://www.geneontology.org/))
+        """
+        # ctx is the context object
+        # return variables are: returnVal
+        #BEGIN get_hierarchicalParents
+        print('Running get_hierarchicalParents() with params=')
+        pprint(InputParams)
+        validated_params=self.validate_params(InputParams);
+        results = re_api.query("GO_get_hierarchicalParents", validated_params)
+
+        returnVal=list(map(lambda x: x["term"]["_key"], results["results"]))
+        #END get_hierarchicalParents
+
+        # At some point might do deeper type checking...
+        if not isinstance(returnVal, list):
+            raise ValueError('Method get_hierarchicalParents return value ' +
                              'returnVal is not type list as required.')
         # return the results
         return [returnVal]

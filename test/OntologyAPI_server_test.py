@@ -63,3 +63,39 @@ class OntologyAPITest(unittest.TestCase):
     def test_get_ancestors(self):
         ret = self.serviceImpl.get_ancestors(self.ctx, {"key": "GO:0000002"})
         self.assertEqual(ret[0], ['GO:0006996', 'GO:0007005', 'GO:0008150','GO:0008150','GO:0009987', 'GO:0016043', 'GO:0071840'])
+
+    def test_get_children(self):
+        ret = self.serviceImpl.get_children(self.ctx, {"key": "GO:0000002"})
+        self.assertEqual(ret[0], ['GO:0033955'])
+
+    def test_get_parents(self):
+        ret = self.serviceImpl.get_parents(self.ctx, {"key": "GO:0000002"})
+        self.assertEqual(ret[0], ['GO:0007005'])
+
+    def test_get_related(self):
+        ret = self.serviceImpl.get_related(self.ctx, {"key": "GO:0000002"})
+        self.assertEqual(ret[0], ['GO:0007005', 'GO:0032042', 'GO:0033955'])
+
+    def test_get_siblings(self):
+        ret = self.serviceImpl.get_siblings(self.ctx, {"key": "GO:0000002"})
+        self.assertEqual(ret[0], ["GO:0000266", "GO:0007006", "GO:0007287", "GO:0008053", "GO:0008637", "GO:0030382", "GO:0048311", "GO:0061726", "GO:0070584", "GO:0097250"])
+
+    def test_get_metadata(self):
+        ret = self.serviceImpl.get_metadata(self.ctx, {"key": "GO:0000002"})
+        self.assertEqual(ret[0], ['GO:0000002'])
+
+    def test_get_hierarchicalAncestors(self):
+        ret = self.serviceImpl.get_hierarchicalAncestors(self.ctx, {"key": "GO:0000002"})
+        self.assertEqual(ret[0], ['GO:0007005', 'GO:0006996', 'GO:0016043', 'GO:0009987', 'GO:0008150', 'GO:0071840', 'GO:0008150'])
+
+    def test_get_hierarchicalChildren(self):
+        ret = self.serviceImpl.get_hierarchicalChildren(self.ctx, {"key": "GO:0000002"})
+        self.assertEqual(ret[0], ['GO:0032042', 'GO:0033955'])
+
+    def test_get_hierarchicalDescendants(self):
+        ret = self.serviceImpl.get_hierarchicalDescendants(self.ctx, {"key": "GO:0000002"})
+        self.assertEqual(ret[0], ['GO:0032042', 'GO:0033955'])
+
+    def test_get_hierarchicalParents(self):
+        ret = self.serviceImpl.get_hierarchicalParents(self.ctx, {"key": "GO:0000002"})
+        self.assertEqual(ret[0], ['GO:0007005'])
