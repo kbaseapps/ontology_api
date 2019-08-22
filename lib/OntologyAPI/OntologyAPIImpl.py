@@ -4,7 +4,7 @@ import logging
 import os
 import jsonschema
 
-from OntologyAPI.utils import re_api 
+from OntologyAPI.utils import re_api, config 
 from OntologyAPI.exceptions import InvalidParamsError, REError
 from pprint import pprint
 from jsonschema.exceptions import ValidationError
@@ -28,15 +28,20 @@ class OntologyAPI:
     ######################################### noqa
     VERSION = "0.0.1"
     GIT_URL = "git@github.com:zhlu9890/ontology_api.git"
-    GIT_COMMIT_HASH = "aadeacbfab28e464aa6cb7034e77288b897ecbcd"
+    GIT_COMMIT_HASH = "d60bca62aee06b1810a429ca9f760ab156d15005"
 
     #BEGIN_CLASS_HEADER
     def validate_params(self, params, schema=None):
+        _CONF = config.get_config()
+        if 'name_space' not in params:
+            params['name_space']=_CONF['default_name_space']
+        name_space_list=list(_CONF['name_space'].keys())
         schema = schema or {
             'type': 'object',
-            'required': ['key'],
+            'required': ['key', 'name_space'],
             'properties': {
                 'key': {'type': 'string'},
+                'name_space': {'type': 'string', 'enum': name_space_list},
                 'limit': {'type': 'integer', 'maximum': 1000},
                 'offset': {'type': 'integer', 'maximum': 100000},
             }
@@ -65,12 +70,11 @@ class OntologyAPI:
         Retrieve descendants
         @return descendants
         :param InputParams: instance of type "InputParams" -> structure:
-           parameter "key" of type "GoID" (GoID : Unique GO term id (Source:
-           external Gene Ontology database - http://www.geneontology.org/)),
-           parameter "limit" of Long, parameter "offset" of Long
-        :returns: instance of type "GoIDList" -> list of type "GoID" (GoID :
-           Unique GO term id (Source: external Gene Ontology database -
-           http://www.geneontology.org/))
+           parameter "key" of type "TermID" (TermID : Unique ontology term
+           id), parameter "name_space" of String, parameter "limit" of Long,
+           parameter "offset" of Long
+        :returns: instance of type "TermIDList" -> list of type "TermID"
+           (TermID : Unique ontology term id)
         """
         # ctx is the context object
         # return variables are: returnVal
@@ -78,7 +82,7 @@ class OntologyAPI:
         print('Running get_descendants() with params=')
         pprint(InputParams)
         validated_params=self.validate_params(InputParams);
-        results = re_api.query("GO_get_descendants", validated_params)
+        results = re_api.query("get_descendants", validated_params)
 
         returnVal=list(map(lambda x: x["term"]["_key"], results["results"]))
         #END get_descendants
@@ -93,12 +97,11 @@ class OntologyAPI:
     def get_ancestors(self, ctx, InputParams):
         """
         :param InputParams: instance of type "InputParams" -> structure:
-           parameter "key" of type "GoID" (GoID : Unique GO term id (Source:
-           external Gene Ontology database - http://www.geneontology.org/)),
-           parameter "limit" of Long, parameter "offset" of Long
-        :returns: instance of type "GoIDList" -> list of type "GoID" (GoID :
-           Unique GO term id (Source: external Gene Ontology database -
-           http://www.geneontology.org/))
+           parameter "key" of type "TermID" (TermID : Unique ontology term
+           id), parameter "name_space" of String, parameter "limit" of Long,
+           parameter "offset" of Long
+        :returns: instance of type "TermIDList" -> list of type "TermID"
+           (TermID : Unique ontology term id)
         """
         # ctx is the context object
         # return variables are: returnVal
@@ -106,7 +109,7 @@ class OntologyAPI:
         print('Running get_ancestors() with params=')
         pprint(InputParams)
         validated_params=self.validate_params(InputParams);
-        results = re_api.query("GO_get_ancestors", validated_params)
+        results = re_api.query("get_ancestors", validated_params)
 
         returnVal=list(map(lambda x: x["term"]["_key"], results["results"]))
         #END get_ancestors
@@ -121,12 +124,11 @@ class OntologyAPI:
     def get_children(self, ctx, InputParams):
         """
         :param InputParams: instance of type "InputParams" -> structure:
-           parameter "key" of type "GoID" (GoID : Unique GO term id (Source:
-           external Gene Ontology database - http://www.geneontology.org/)),
-           parameter "limit" of Long, parameter "offset" of Long
-        :returns: instance of type "GoIDList" -> list of type "GoID" (GoID :
-           Unique GO term id (Source: external Gene Ontology database -
-           http://www.geneontology.org/))
+           parameter "key" of type "TermID" (TermID : Unique ontology term
+           id), parameter "name_space" of String, parameter "limit" of Long,
+           parameter "offset" of Long
+        :returns: instance of type "TermIDList" -> list of type "TermID"
+           (TermID : Unique ontology term id)
         """
         # ctx is the context object
         # return variables are: returnVal
@@ -134,7 +136,7 @@ class OntologyAPI:
         print('Running get_children() with params=')
         pprint(InputParams)
         validated_params=self.validate_params(InputParams);
-        results = re_api.query("GO_get_children", validated_params)
+        results = re_api.query("get_children", validated_params)
 
         returnVal=list(map(lambda x: x["term"]["_key"], results["results"]))
         #END get_children
@@ -149,12 +151,11 @@ class OntologyAPI:
     def get_parents(self, ctx, InputParams):
         """
         :param InputParams: instance of type "InputParams" -> structure:
-           parameter "key" of type "GoID" (GoID : Unique GO term id (Source:
-           external Gene Ontology database - http://www.geneontology.org/)),
-           parameter "limit" of Long, parameter "offset" of Long
-        :returns: instance of type "GoIDList" -> list of type "GoID" (GoID :
-           Unique GO term id (Source: external Gene Ontology database -
-           http://www.geneontology.org/))
+           parameter "key" of type "TermID" (TermID : Unique ontology term
+           id), parameter "name_space" of String, parameter "limit" of Long,
+           parameter "offset" of Long
+        :returns: instance of type "TermIDList" -> list of type "TermID"
+           (TermID : Unique ontology term id)
         """
         # ctx is the context object
         # return variables are: returnVal
@@ -162,7 +163,7 @@ class OntologyAPI:
         print('Running get_parents() with params=')
         pprint(InputParams)
         validated_params=self.validate_params(InputParams);
-        results = re_api.query("GO_get_parents", validated_params)
+        results = re_api.query("get_parents", validated_params)
 
         returnVal=list(map(lambda x: x["term"]["_key"], results["results"]))
         #END get_parents
@@ -177,12 +178,11 @@ class OntologyAPI:
     def get_related(self, ctx, InputParams):
         """
         :param InputParams: instance of type "InputParams" -> structure:
-           parameter "key" of type "GoID" (GoID : Unique GO term id (Source:
-           external Gene Ontology database - http://www.geneontology.org/)),
-           parameter "limit" of Long, parameter "offset" of Long
-        :returns: instance of type "GoIDList" -> list of type "GoID" (GoID :
-           Unique GO term id (Source: external Gene Ontology database -
-           http://www.geneontology.org/))
+           parameter "key" of type "TermID" (TermID : Unique ontology term
+           id), parameter "name_space" of String, parameter "limit" of Long,
+           parameter "offset" of Long
+        :returns: instance of type "TermIDList" -> list of type "TermID"
+           (TermID : Unique ontology term id)
         """
         # ctx is the context object
         # return variables are: returnVal
@@ -190,7 +190,7 @@ class OntologyAPI:
         print('Running get_related() with params=')
         pprint(InputParams)
         validated_params=self.validate_params(InputParams);
-        results = re_api.query("GO_get_related", validated_params)
+        results = re_api.query("get_related", validated_params)
 
         returnVal=list(map(lambda x: x["term"]["_key"], results["results"]))
         #END get_related
@@ -205,12 +205,11 @@ class OntologyAPI:
     def get_siblings(self, ctx, InputParams):
         """
         :param InputParams: instance of type "InputParams" -> structure:
-           parameter "key" of type "GoID" (GoID : Unique GO term id (Source:
-           external Gene Ontology database - http://www.geneontology.org/)),
-           parameter "limit" of Long, parameter "offset" of Long
-        :returns: instance of type "GoIDList" -> list of type "GoID" (GoID :
-           Unique GO term id (Source: external Gene Ontology database -
-           http://www.geneontology.org/))
+           parameter "key" of type "TermID" (TermID : Unique ontology term
+           id), parameter "name_space" of String, parameter "limit" of Long,
+           parameter "offset" of Long
+        :returns: instance of type "TermIDList" -> list of type "TermID"
+           (TermID : Unique ontology term id)
         """
         # ctx is the context object
         # return variables are: returnVal
@@ -218,7 +217,7 @@ class OntologyAPI:
         print('Running get_siblings() with params=')
         pprint(InputParams)
         validated_params=self.validate_params(InputParams);
-        results = re_api.query("GO_get_siblings", validated_params)
+        results = re_api.query("get_siblings", validated_params)
 
         returnVal=list(map(lambda x: x, results["results"]))
         #END get_siblings
@@ -233,12 +232,11 @@ class OntologyAPI:
     def get_metadata(self, ctx, InputParams):
         """
         :param InputParams: instance of type "InputParams" -> structure:
-           parameter "key" of type "GoID" (GoID : Unique GO term id (Source:
-           external Gene Ontology database - http://www.geneontology.org/)),
-           parameter "limit" of Long, parameter "offset" of Long
-        :returns: instance of type "GoIDList" -> list of type "GoID" (GoID :
-           Unique GO term id (Source: external Gene Ontology database -
-           http://www.geneontology.org/))
+           parameter "key" of type "TermID" (TermID : Unique ontology term
+           id), parameter "name_space" of String, parameter "limit" of Long,
+           parameter "offset" of Long
+        :returns: instance of type "TermIDList" -> list of type "TermID"
+           (TermID : Unique ontology term id)
         """
         # ctx is the context object
         # return variables are: returnVal
@@ -246,7 +244,7 @@ class OntologyAPI:
         print('Running get_metadata() with params=')
         pprint(InputParams)
         validated_params=self.validate_params(InputParams);
-        results = re_api.query("GO_get_metadata", validated_params)
+        results = re_api.query("get_metadata", validated_params)
 
         returnVal=list(map(lambda x: x["_key"], results["results"]))
         #END get_metadata
@@ -261,12 +259,11 @@ class OntologyAPI:
     def get_hierarchicalAncestors(self, ctx, InputParams):
         """
         :param InputParams: instance of type "InputParams" -> structure:
-           parameter "key" of type "GoID" (GoID : Unique GO term id (Source:
-           external Gene Ontology database - http://www.geneontology.org/)),
-           parameter "limit" of Long, parameter "offset" of Long
-        :returns: instance of type "GoIDList" -> list of type "GoID" (GoID :
-           Unique GO term id (Source: external Gene Ontology database -
-           http://www.geneontology.org/))
+           parameter "key" of type "TermID" (TermID : Unique ontology term
+           id), parameter "name_space" of String, parameter "limit" of Long,
+           parameter "offset" of Long
+        :returns: instance of type "TermIDList" -> list of type "TermID"
+           (TermID : Unique ontology term id)
         """
         # ctx is the context object
         # return variables are: returnVal
@@ -274,7 +271,7 @@ class OntologyAPI:
         print('Running get_hierarchicalAncestors() with params=')
         pprint(InputParams)
         validated_params=self.validate_params(InputParams);
-        results = re_api.query("GO_get_hierarchicalAncestors", validated_params)
+        results = re_api.query("get_hierarchicalAncestors", validated_params)
 
         returnVal=list(map(lambda x: x["term"]["_key"], results["results"]))
         #END get_hierarchicalAncestors
@@ -289,12 +286,11 @@ class OntologyAPI:
     def get_hierarchicalChildren(self, ctx, InputParams):
         """
         :param InputParams: instance of type "InputParams" -> structure:
-           parameter "key" of type "GoID" (GoID : Unique GO term id (Source:
-           external Gene Ontology database - http://www.geneontology.org/)),
-           parameter "limit" of Long, parameter "offset" of Long
-        :returns: instance of type "GoIDList" -> list of type "GoID" (GoID :
-           Unique GO term id (Source: external Gene Ontology database -
-           http://www.geneontology.org/))
+           parameter "key" of type "TermID" (TermID : Unique ontology term
+           id), parameter "name_space" of String, parameter "limit" of Long,
+           parameter "offset" of Long
+        :returns: instance of type "TermIDList" -> list of type "TermID"
+           (TermID : Unique ontology term id)
         """
         # ctx is the context object
         # return variables are: returnVal
@@ -302,7 +298,7 @@ class OntologyAPI:
         print('Running get_hierarchicalChildren() with params=')
         pprint(InputParams)
         validated_params=self.validate_params(InputParams);
-        results = re_api.query("GO_get_hierarchicalChildren", validated_params)
+        results = re_api.query("get_hierarchicalChildren", validated_params)
 
         returnVal=list(map(lambda x: x["term"]["_key"], results["results"]))
         #END get_hierarchicalChildren
@@ -317,12 +313,11 @@ class OntologyAPI:
     def get_hierarchicalDescendants(self, ctx, InputParams):
         """
         :param InputParams: instance of type "InputParams" -> structure:
-           parameter "key" of type "GoID" (GoID : Unique GO term id (Source:
-           external Gene Ontology database - http://www.geneontology.org/)),
-           parameter "limit" of Long, parameter "offset" of Long
-        :returns: instance of type "GoIDList" -> list of type "GoID" (GoID :
-           Unique GO term id (Source: external Gene Ontology database -
-           http://www.geneontology.org/))
+           parameter "key" of type "TermID" (TermID : Unique ontology term
+           id), parameter "name_space" of String, parameter "limit" of Long,
+           parameter "offset" of Long
+        :returns: instance of type "TermIDList" -> list of type "TermID"
+           (TermID : Unique ontology term id)
         """
         # ctx is the context object
         # return variables are: returnVal
@@ -330,7 +325,7 @@ class OntologyAPI:
         print('Running get_hierarchicalDescendants() with params=')
         pprint(InputParams)
         validated_params=self.validate_params(InputParams);
-        results = re_api.query("GO_get_hierarchicalDescendants", validated_params)
+        results = re_api.query("get_hierarchicalDescendants", validated_params)
 
         returnVal=list(map(lambda x: x["term"]["_key"], results["results"]))
         #END get_hierarchicalDescendants
@@ -345,12 +340,11 @@ class OntologyAPI:
     def get_hierarchicalParents(self, ctx, InputParams):
         """
         :param InputParams: instance of type "InputParams" -> structure:
-           parameter "key" of type "GoID" (GoID : Unique GO term id (Source:
-           external Gene Ontology database - http://www.geneontology.org/)),
-           parameter "limit" of Long, parameter "offset" of Long
-        :returns: instance of type "GoIDList" -> list of type "GoID" (GoID :
-           Unique GO term id (Source: external Gene Ontology database -
-           http://www.geneontology.org/))
+           parameter "key" of type "TermID" (TermID : Unique ontology term
+           id), parameter "name_space" of String, parameter "limit" of Long,
+           parameter "offset" of Long
+        :returns: instance of type "TermIDList" -> list of type "TermID"
+           (TermID : Unique ontology term id)
         """
         # ctx is the context object
         # return variables are: returnVal
@@ -358,7 +352,7 @@ class OntologyAPI:
         print('Running get_hierarchicalParents() with params=')
         pprint(InputParams)
         validated_params=self.validate_params(InputParams);
-        results = re_api.query("GO_get_hierarchicalParents", validated_params)
+        results = re_api.query("get_hierarchicalParents", validated_params)
 
         returnVal=list(map(lambda x: x["term"]["_key"], results["results"]))
         #END get_hierarchicalParents
