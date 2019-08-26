@@ -61,6 +61,8 @@ class OntologyAPITest(unittest.TestCase):
         self.assertEqual(returnVal, ["GO:0033955"])
         with self.assertRaises(InvalidParamsError):
             self.serviceImpl.get_descendants(self.ctx, {"key": "go_ontology/GO:0000002"})
+        with self.assertRaises(InvalidParamsError):
+            self.serviceImpl.get_descendants(self.ctx, {"id": "go_ontology\GO:0000002"})
 
     def test_get_ancestors(self):
         ret = self.serviceImpl.get_ancestors(self.ctx, {"id": "go_ontology/GO:0000002"})

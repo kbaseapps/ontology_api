@@ -2,6 +2,7 @@
 #BEGIN_HEADER
 import logging
 import os
+import re
 import jsonschema
 
 from OntologyAPI.utils import re_api, config 
@@ -35,10 +36,13 @@ class OntologyAPI:
         _CONF = config.get_config()
         if 'id' not in params:
             raise InvalidParamsError('Parameter validation error: no id')
-        (name_space, key)=params['id'].split('/')
+        match=re.search('^([^/]+)/(.+)$', params['id'])
+        if match:
+            params['name_space']=match.group(1)
+            params['key']=match.group(2)
+        else:
+            raise InvalidParamsError('Parameter validation error: invalid id format')
         del params['id']
-        params['key']=key
-        params['name_space']=name_space
         name_space_list=list(_CONF['name_space'].keys())
         schema = schema or {
             'type': 'object',
