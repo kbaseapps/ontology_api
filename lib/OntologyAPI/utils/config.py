@@ -9,9 +9,9 @@ import functools
 def get_config():
     config = {
         're_url': 'https://ci.kbase.us/services/relation_engine_api',
-        'default_name_space': 'GO',
+        'default_name_space': 'go_ontology',
         'name_space': {
-            'GO': 'GO'
+            'go_ontology': 'GO'
         }
     }
     return config
