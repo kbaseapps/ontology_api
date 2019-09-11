@@ -55,6 +55,12 @@ class OntologyAPITest(unittest.TestCase):
             print('Test workspace was deleted')
 
     # NOTE: According to Python unittest naming rules test method names should start from 'test'. # noqa
+
+    def test_status(self):
+      ret = self.serviceImpl.status(self.ctx)
+      returnVal=ret[0]["state"]
+      self.assertEqual(returnVal, "OK")
+
     def test_get_descendants(self):
         ret = self.serviceImpl.get_descendants(self.ctx, {"id": "go_ontology/GO:0000002"})
         returnVal=list(map(lambda x: x["term"]["_key"], ret[0]["results"]))

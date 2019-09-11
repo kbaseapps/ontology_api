@@ -8,7 +8,7 @@ from OntologyAPI.exceptions import REError
 
 _CONF = get_config()
 
-def query(name, params):
+def query(name, params, token=None):
     """Run a stored query from the RE API."""
     name_space=params['name_space']
     del params['name_space']
@@ -17,7 +17,8 @@ def query(name, params):
     resp = requests.post(
         url,
         params={'stored_query': query},
-        data=json.dumps(params)
+        data=json.dumps(params),
+        headers={'Authorization': token}
     )
     if not resp.ok:
         raise REError(resp)
