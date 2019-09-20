@@ -10,8 +10,10 @@ module OntologyAPI {
     /* ID : name space/ontology term id */
     typedef string ID;
 
+    /* ID : name space/ontology term id */
     typedef structure {
-        ID id;
+        ID  id;
+        int ts;
         int  limit;
         int  offset;
     } InputParams;

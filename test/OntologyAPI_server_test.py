@@ -63,7 +63,7 @@ class OntologyAPITest(unittest.TestCase):
 
     def test_get_descendants(self):
         ret = self.serviceImpl.get_descendants(self.ctx, {"id": "go_ontology/GO:0000002"})
-        returnVal=list(map(lambda x: x["term"]["_key"], ret[0]["results"]))
+        returnVal=list(map(lambda x: x["term"]["id"], ret[0]["results"]))
         self.assertEqual(returnVal, ["GO:0033955"])
         with self.assertRaises(InvalidParamsError):
             self.serviceImpl.get_descendants(self.ctx, {"key": "go_ontology/GO:0000002"})
@@ -72,22 +72,22 @@ class OntologyAPITest(unittest.TestCase):
 
     def test_get_ancestors(self):
         ret = self.serviceImpl.get_ancestors(self.ctx, {"id": "go_ontology/GO:0000002"})
-        returnVal=list(map(lambda x: x["term"]["_key"], ret[0]["results"]))
+        returnVal=list(map(lambda x: x["term"]["id"], ret[0]["results"]))
         self.assertEqual(returnVal, ['GO:0006996', 'GO:0007005', 'GO:0008150','GO:0008150','GO:0009987', 'GO:0016043', 'GO:0071840'])
 
     def test_get_children(self):
         ret = self.serviceImpl.get_children(self.ctx, {"id": "go_ontology/GO:0000002"})
-        returnVal=list(map(lambda x: x["term"]["_key"], ret[0]["results"]))
+        returnVal=list(map(lambda x: x["term"]["id"], ret[0]["results"]))
         self.assertEqual(returnVal, ['GO:0033955'])
 
     def test_get_parents(self):
         ret = self.serviceImpl.get_parents(self.ctx, {"id": "go_ontology/GO:0000002"})
-        returnVal=list(map(lambda x: x["term"]["_key"], ret[0]["results"]))
+        returnVal=list(map(lambda x: x["term"]["id"], ret[0]["results"]))
         self.assertEqual(returnVal, ['GO:0007005'])
 
     def test_get_related(self):
         ret = self.serviceImpl.get_related(self.ctx, {"id": "go_ontology/GO:0000002"})
-        returnVal=list(map(lambda x: x["term"]["_key"], ret[0]["results"]))
+        returnVal=list(map(lambda x: x["term"]["id"], ret[0]["results"]))
         self.assertEqual(returnVal, ['GO:0007005', 'GO:0032042', 'GO:0033955'])
 
     def test_get_siblings(self):
@@ -97,25 +97,25 @@ class OntologyAPITest(unittest.TestCase):
 
     def test_get_metadata(self):
         ret = self.serviceImpl.get_metadata(self.ctx, {"id": "go_ontology/GO:0000002"})
-        returnVal=list(map(lambda x: x["_key"], ret[0]["results"]))
+        returnVal=list(map(lambda x: x["id"], ret[0]["results"]))
         self.assertEqual(returnVal, ['GO:0000002'])
 
     def test_get_hierarchicalAncestors(self):
         ret = self.serviceImpl.get_hierarchicalAncestors(self.ctx, {"id": "go_ontology/GO:0000002"})
-        returnVal=list(map(lambda x: x["term"]["_key"], ret[0]["results"]))
-        self.assertEqual(returnVal, ['GO:0007005', 'GO:0006996', 'GO:0016043', 'GO:0009987', 'GO:0008150', 'GO:0071840', 'GO:0008150'])
+        returnVal=list(map(lambda x: x["term"]["id"], ret[0]["results"]))
+        self.assertEqual(returnVal, [ "GO:0006996", "GO:0007005", "GO:0008150", "GO:0008150", "GO:0009987", "GO:0016043", "GO:0071840"])
 
     def test_get_hierarchicalChildren(self):
         ret = self.serviceImpl.get_hierarchicalChildren(self.ctx, {"id": "go_ontology/GO:0000002"})
-        returnVal=list(map(lambda x: x["term"]["_key"], ret[0]["results"]))
+        returnVal=list(map(lambda x: x["term"]["id"], ret[0]["results"]))
         self.assertEqual(returnVal, ['GO:0032042', 'GO:0033955'])
 
     def test_get_hierarchicalDescendants(self):
         ret = self.serviceImpl.get_hierarchicalDescendants(self.ctx, {"id": "go_ontology/GO:0000002"})
-        returnVal=list(map(lambda x: x["term"]["_key"], ret[0]["results"]))
-        self.assertEqual(returnVal, ['GO:0032042', 'GO:0033955'])
+        returnVal=list(map(lambda x: x["term"]["id"], ret[0]["results"]))
+        self.assertEqual(returnVal, ['GO:0032042', 'GO:0032043', 'GO:0033955', 'GO:0043504', 'GO:1901858', 'GO:1901859', 'GO:1901859', 'GO:1901860', 'GO:1901860', 'GO:1905951'])
 
     def test_get_hierarchicalParents(self):
         ret = self.serviceImpl.get_hierarchicalParents(self.ctx, {"id": "go_ontology/GO:0000002"})
-        returnVal=list(map(lambda x: x["term"]["_key"], ret[0]["results"]))
+        returnVal=list(map(lambda x: x["term"]["id"], ret[0]["results"]))
         self.assertEqual(returnVal, ['GO:0007005'])

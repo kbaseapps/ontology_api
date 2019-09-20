@@ -4,6 +4,7 @@ import logging
 import os
 import re
 import jsonschema
+import time
 
 from OntologyAPI.utils import re_api, config 
 from OntologyAPI.exceptions import InvalidParamsError, REError
@@ -28,37 +29,39 @@ class OntologyAPI:
     # the latter method is running.
     ######################################### noqa
     VERSION = "0.0.1"
-    GIT_URL = "git@github.com:zhlu9890/ontology_api.git"
-    GIT_COMMIT_HASH = "15f72291f43d0ac68ad00714369d81b668c1b74d"
+    GIT_URL = "https://github.com/kbaseapps/ontology_api"
+    GIT_COMMIT_HASH = "6cf0ca304ff4053fa930efdd0576e60d72ffc920"
 
     #BEGIN_CLASS_HEADER
     def validate_params(self, params, schema=None):
         _CONF = config.get_config()
-        if 'id' not in params:
+        _params = params.copy()
+        if 'id' not in _params:
             raise InvalidParamsError('Parameter validation error: no id')
-        match=re.search('^([^/]+)/(.+)$', params['id'])
+        match=re.search('^([^/]+)/(.+)$', _params['id'])
         if match:
-            params['name_space']=match.group(1)
-            params['key']=match.group(2)
+            _params['ns']=match.group(1)
+            _params['id']=match.group(2)
         else:
             raise InvalidParamsError('Parameter validation error: invalid id format')
-        del params['id']
-        name_space_list=list(_CONF['name_space'].keys())
+        ns_list=list(_CONF['ns'].keys())
+        _params['ts'] = _params.get('ts', int(time.time() * 1000)) 
         schema = schema or {
             'type': 'object',
-            'required': ['key', 'name_space'],
+            'required': ['id', 'ns', 'ts'],
             'properties': {
-                'key': {'type': 'string'},
-                'name_space': {'type': 'string', 'enum': name_space_list},
+                'id': {'type': 'string'},
+                'ns': {'type': 'string', 'enum': ns_list},
+                'ts': {'type': 'integer'},
                 'limit': {'type': 'integer', 'maximum': 1000},
-                'offset': {'type': 'integer', 'maximum': 100000},
+                'offset': {'type': 'integer', 'maximum': 100000}
             }
         }
         try:
-            jsonschema.validate(instance=params, schema=schema)
+            jsonschema.validate(instance=_params, schema=schema)
         except ValidationError as err:
             raise InvalidParamsError('Parameter validation error: ' + err.message)
-        return params
+        return _params
     #END_CLASS_HEADER
 
     # config contains contents of config file in a hash or None if it couldn't
@@ -77,8 +80,9 @@ class OntologyAPI:
         """
         Retrieve descendants
         @return descendants
-        :param InputParams: instance of type "InputParams" -> structure:
-           parameter "id" of type "ID" (ID : name space/ontology term id),
+        :param InputParams: instance of type "InputParams" (ID : name
+           space/ontology term id) -> structure: parameter "id" of type "ID"
+           (ID : name space/ontology term id), parameter "ts" of Long,
            parameter "limit" of Long, parameter "offset" of Long
         :returns: instance of type "Results" (* Generic results * stats -
            Query execution information from ArangoDB. * results - array of
@@ -106,8 +110,9 @@ class OntologyAPI:
 
     def get_ancestors(self, ctx, InputParams):
         """
-        :param InputParams: instance of type "InputParams" -> structure:
-           parameter "id" of type "ID" (ID : name space/ontology term id),
+        :param InputParams: instance of type "InputParams" (ID : name
+           space/ontology term id) -> structure: parameter "id" of type "ID"
+           (ID : name space/ontology term id), parameter "ts" of Long,
            parameter "limit" of Long, parameter "offset" of Long
         :returns: instance of type "Results" (* Generic results * stats -
            Query execution information from ArangoDB. * results - array of
@@ -135,8 +140,9 @@ class OntologyAPI:
 
     def get_children(self, ctx, InputParams):
         """
-        :param InputParams: instance of type "InputParams" -> structure:
-           parameter "id" of type "ID" (ID : name space/ontology term id),
+        :param InputParams: instance of type "InputParams" (ID : name
+           space/ontology term id) -> structure: parameter "id" of type "ID"
+           (ID : name space/ontology term id), parameter "ts" of Long,
            parameter "limit" of Long, parameter "offset" of Long
         :returns: instance of type "Results" (* Generic results * stats -
            Query execution information from ArangoDB. * results - array of
@@ -164,8 +170,9 @@ class OntologyAPI:
 
     def get_parents(self, ctx, InputParams):
         """
-        :param InputParams: instance of type "InputParams" -> structure:
-           parameter "id" of type "ID" (ID : name space/ontology term id),
+        :param InputParams: instance of type "InputParams" (ID : name
+           space/ontology term id) -> structure: parameter "id" of type "ID"
+           (ID : name space/ontology term id), parameter "ts" of Long,
            parameter "limit" of Long, parameter "offset" of Long
         :returns: instance of type "Results" (* Generic results * stats -
            Query execution information from ArangoDB. * results - array of
@@ -193,8 +200,9 @@ class OntologyAPI:
 
     def get_related(self, ctx, InputParams):
         """
-        :param InputParams: instance of type "InputParams" -> structure:
-           parameter "id" of type "ID" (ID : name space/ontology term id),
+        :param InputParams: instance of type "InputParams" (ID : name
+           space/ontology term id) -> structure: parameter "id" of type "ID"
+           (ID : name space/ontology term id), parameter "ts" of Long,
            parameter "limit" of Long, parameter "offset" of Long
         :returns: instance of type "Results" (* Generic results * stats -
            Query execution information from ArangoDB. * results - array of
@@ -222,8 +230,9 @@ class OntologyAPI:
 
     def get_siblings(self, ctx, InputParams):
         """
-        :param InputParams: instance of type "InputParams" -> structure:
-           parameter "id" of type "ID" (ID : name space/ontology term id),
+        :param InputParams: instance of type "InputParams" (ID : name
+           space/ontology term id) -> structure: parameter "id" of type "ID"
+           (ID : name space/ontology term id), parameter "ts" of Long,
            parameter "limit" of Long, parameter "offset" of Long
         :returns: instance of type "Results" (* Generic results * stats -
            Query execution information from ArangoDB. * results - array of
@@ -251,8 +260,9 @@ class OntologyAPI:
 
     def get_metadata(self, ctx, InputParams):
         """
-        :param InputParams: instance of type "InputParams" -> structure:
-           parameter "id" of type "ID" (ID : name space/ontology term id),
+        :param InputParams: instance of type "InputParams" (ID : name
+           space/ontology term id) -> structure: parameter "id" of type "ID"
+           (ID : name space/ontology term id), parameter "ts" of Long,
            parameter "limit" of Long, parameter "offset" of Long
         :returns: instance of type "Results" (* Generic results * stats -
            Query execution information from ArangoDB. * results - array of
@@ -280,8 +290,9 @@ class OntologyAPI:
 
     def get_hierarchicalAncestors(self, ctx, InputParams):
         """
-        :param InputParams: instance of type "InputParams" -> structure:
-           parameter "id" of type "ID" (ID : name space/ontology term id),
+        :param InputParams: instance of type "InputParams" (ID : name
+           space/ontology term id) -> structure: parameter "id" of type "ID"
+           (ID : name space/ontology term id), parameter "ts" of Long,
            parameter "limit" of Long, parameter "offset" of Long
         :returns: instance of type "Results" (* Generic results * stats -
            Query execution information from ArangoDB. * results - array of
@@ -309,8 +320,9 @@ class OntologyAPI:
 
     def get_hierarchicalChildren(self, ctx, InputParams):
         """
-        :param InputParams: instance of type "InputParams" -> structure:
-           parameter "id" of type "ID" (ID : name space/ontology term id),
+        :param InputParams: instance of type "InputParams" (ID : name
+           space/ontology term id) -> structure: parameter "id" of type "ID"
+           (ID : name space/ontology term id), parameter "ts" of Long,
            parameter "limit" of Long, parameter "offset" of Long
         :returns: instance of type "Results" (* Generic results * stats -
            Query execution information from ArangoDB. * results - array of
@@ -338,8 +350,9 @@ class OntologyAPI:
 
     def get_hierarchicalDescendants(self, ctx, InputParams):
         """
-        :param InputParams: instance of type "InputParams" -> structure:
-           parameter "id" of type "ID" (ID : name space/ontology term id),
+        :param InputParams: instance of type "InputParams" (ID : name
+           space/ontology term id) -> structure: parameter "id" of type "ID"
+           (ID : name space/ontology term id), parameter "ts" of Long,
            parameter "limit" of Long, parameter "offset" of Long
         :returns: instance of type "Results" (* Generic results * stats -
            Query execution information from ArangoDB. * results - array of
@@ -367,8 +380,9 @@ class OntologyAPI:
 
     def get_hierarchicalParents(self, ctx, InputParams):
         """
-        :param InputParams: instance of type "InputParams" -> structure:
-           parameter "id" of type "ID" (ID : name space/ontology term id),
+        :param InputParams: instance of type "InputParams" (ID : name
+           space/ontology term id) -> structure: parameter "id" of type "ID"
+           (ID : name space/ontology term id), parameter "ts" of Long,
            parameter "limit" of Long, parameter "offset" of Long
         :returns: instance of type "Results" (* Generic results * stats -
            Query execution information from ArangoDB. * results - array of

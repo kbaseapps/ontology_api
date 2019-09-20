@@ -10,10 +10,10 @@ _CONF = get_config()
 
 def query(name, params, token=None):
     """Run a stored query from the RE API."""
-    name_space=params['name_space']
-    del params['name_space']
+    ns=params['ns']
+    del params['ns']
     url=_CONF['re_url'] + '/api/v1/query_results'
-    query=_CONF['name_space'][name_space] + '_' + name
+    query=_CONF['ns'][ns] + '_' + name
     resp = requests.post(
         url,
         params={'stored_query': query},

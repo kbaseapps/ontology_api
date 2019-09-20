@@ -10,7 +10,7 @@ def get_config():
     config = {
         're_url': 'https://ci.kbase.us/services/relation_engine_api',
         'default_name_space': 'go_ontology',
-        'name_space': {
+        'ns': {
             'go_ontology': 'GO'
         }
     }
