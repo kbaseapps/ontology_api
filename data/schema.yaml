@@ -1,0 +1,17 @@
+get_terms:
+    type: object
+    required: [ids, ns, ts]
+    properties:
+        ids: {type: array, items: {type: string}, maxItems: 10000}
+        ns: {type: string, enum: []}
+        ts: {type: integer}
+
+default:
+    type: object
+    required: [id, ns, ts]
+    properties:
+        id: {type: string}
+        ns: {type: string, enum: []}
+        ts: {type: integer}
+        limit: {type: integer, maximum: 1000}
+        offset: {type: integer, maximum: 100000}

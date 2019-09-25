@@ -4,14 +4,13 @@ Manage configuration data for the app.
 import os
 import functools
 
-
 @functools.lru_cache(maxsize=1)
 def get_config():
     config = {
-        're_url': 'https://ci.kbase.us/services/relation_engine_api',
-        'default_name_space': 'go_ontology',
+        're_url': os.environ.get('KBASE_ENDPOINT', 'https://ci.kbase.us/services').strip('/') + '/relation_engine_api',
         'ns': {
-            'go_ontology': 'GO'
+            'go': 'GO',
+            'default': 'GO'
         }
     }
     return config

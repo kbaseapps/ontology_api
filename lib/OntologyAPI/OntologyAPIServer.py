@@ -362,10 +362,10 @@ class Application(object):
                              name='OntologyAPI.get_siblings',
                              types=[dict])
         self.method_authentication['OntologyAPI.get_siblings'] = 'optional'  # noqa
-        self.rpc_service.add(impl_OntologyAPI.get_metadata,
-                             name='OntologyAPI.get_metadata',
+        self.rpc_service.add(impl_OntologyAPI.get_terms,
+                             name='OntologyAPI.get_terms',
                              types=[dict])
-        self.method_authentication['OntologyAPI.get_metadata'] = 'optional'  # noqa
+        self.method_authentication['OntologyAPI.get_terms'] = 'optional'  # noqa
         self.rpc_service.add(impl_OntologyAPI.get_hierarchicalAncestors,
                              name='OntologyAPI.get_hierarchicalAncestors',
                              types=[dict])

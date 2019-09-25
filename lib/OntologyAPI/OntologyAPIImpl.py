@@ -3,13 +3,9 @@
 import logging
 import os
 import re
-import jsonschema
-import time
 
-from OntologyAPI.utils import re_api, config 
-from OntologyAPI.exceptions import InvalidParamsError, REError
+from OntologyAPI.utils import re_api, misc
 from pprint import pprint
-from jsonschema.exceptions import ValidationError
 #END_HEADER
 
 
@@ -30,37 +26,11 @@ class OntologyAPI:
     ######################################### noqa
     VERSION = "0.0.1"
     GIT_URL = "https://github.com/kbaseapps/ontology_api"
-    GIT_COMMIT_HASH = "6cf0ca304ff4053fa930efdd0576e60d72ffc920"
+    GIT_COMMIT_HASH = "3e11237bcf2d04f0e1d6a0a8aa889407e41a5c9e"
 
     #BEGIN_CLASS_HEADER
-    def validate_params(self, params, schema=None):
-        _CONF = config.get_config()
-        _params = params.copy()
-        if 'id' not in _params:
-            raise InvalidParamsError('Parameter validation error: no id')
-        match=re.search('^([^/]+)/(.+)$', _params['id'])
-        if match:
-            _params['ns']=match.group(1)
-            _params['id']=match.group(2)
-        else:
-            raise InvalidParamsError('Parameter validation error: invalid id format')
-        ns_list=list(_CONF['ns'].keys())
-        _params['ts'] = _params.get('ts', int(time.time() * 1000)) 
-        schema = schema or {
-            'type': 'object',
-            'required': ['id', 'ns', 'ts'],
-            'properties': {
-                'id': {'type': 'string'},
-                'ns': {'type': 'string', 'enum': ns_list},
-                'ts': {'type': 'integer'},
-                'limit': {'type': 'integer', 'maximum': 1000},
-                'offset': {'type': 'integer', 'maximum': 100000}
-            }
-        }
-        try:
-            jsonschema.validate(instance=_params, schema=schema)
-        except ValidationError as err:
-            raise InvalidParamsError('Parameter validation error: ' + err.message)
+    def validate_params(self, params, schema='default'):
+        _params = misc.validate_params(params, schema);
         return _params
     #END_CLASS_HEADER
 
@@ -68,7 +38,6 @@ class OntologyAPI:
     # be found
     def __init__(self, config):
         #BEGIN_CONSTRUCTOR
-        self.callback_url = os.environ['SDK_CALLBACK_URL']
         self.shared_folder = config['scratch']
         logging.basicConfig(format='%(created)s %(levelname)s: %(message)s',
                             level=logging.INFO)
@@ -76,29 +45,32 @@ class OntologyAPI:
         pass
 
 
-    def get_descendants(self, ctx, InputParams):
+    def get_descendants(self, ctx, GenericParams):
         """
-        Retrieve descendants
-        @return descendants
-        :param InputParams: instance of type "InputParams" (ID : name
-           space/ontology term id) -> structure: parameter "id" of type "ID"
-           (ID : name space/ontology term id), parameter "ts" of Long,
-           parameter "limit" of Long, parameter "offset" of Long
-        :returns: instance of type "Results" (* Generic results * stats -
-           Query execution information from ArangoDB. * results - array of
+        Retrieve descendants of an ontology term by ID
+        :param GenericParams: instance of type "GenericParams" (Generic
+           Parameters id - required - ontology term id, such as "GO:0000002"
+           ts - optional - fetch documents with this active timestamp,
+           defaults to now ns - optional - ontology namespace to use,
+           defaults to "go" limit - optional - number of results to return
+           (defaults to 20) offset - optional - number of results to skip
+           (defaults to 0)) -> structure: parameter "id" of type "ID" (ID :
+           ontology term id, such as "GO:0000002"), parameter "ts" of Long,
+           parameter "ns" of String, parameter "limit" of Long, parameter
+           "offset" of Long
+        :returns: instance of type "GenericResults" (Generic results stats -
+           Query execution information from ArangoDB. results - array of
            objects of results.) -> structure: parameter "stats" of
            unspecified object, parameter "results" of list of unspecified
-           object
+           object, parameter "ts" of Long
         """
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN get_descendants
-        print('Running get_descendants() with params=')
-        pprint(InputParams)
-        validated_params=self.validate_params(InputParams);
+        validated_params=self.validate_params(GenericParams);
         results = re_api.query("get_descendants", validated_params)
 
-        returnVal={"stats": results["stats"], "results": results["results"]}
+        returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"]}
         #END get_descendants
 
         # At some point might do deeper type checking...
@@ -108,27 +80,32 @@ class OntologyAPI:
         # return the results
         return [returnVal]
 
-    def get_ancestors(self, ctx, InputParams):
+    def get_ancestors(self, ctx, GenericParams):
         """
-        :param InputParams: instance of type "InputParams" (ID : name
-           space/ontology term id) -> structure: parameter "id" of type "ID"
-           (ID : name space/ontology term id), parameter "ts" of Long,
-           parameter "limit" of Long, parameter "offset" of Long
-        :returns: instance of type "Results" (* Generic results * stats -
-           Query execution information from ArangoDB. * results - array of
+        Retrieve ancestors of an ontology term by ID
+        :param GenericParams: instance of type "GenericParams" (Generic
+           Parameters id - required - ontology term id, such as "GO:0000002"
+           ts - optional - fetch documents with this active timestamp,
+           defaults to now ns - optional - ontology namespace to use,
+           defaults to "go" limit - optional - number of results to return
+           (defaults to 20) offset - optional - number of results to skip
+           (defaults to 0)) -> structure: parameter "id" of type "ID" (ID :
+           ontology term id, such as "GO:0000002"), parameter "ts" of Long,
+           parameter "ns" of String, parameter "limit" of Long, parameter
+           "offset" of Long
+        :returns: instance of type "GenericResults" (Generic results stats -
+           Query execution information from ArangoDB. results - array of
            objects of results.) -> structure: parameter "stats" of
            unspecified object, parameter "results" of list of unspecified
-           object
+           object, parameter "ts" of Long
         """
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN get_ancestors
-        print('Running get_ancestors() with params=')
-        pprint(InputParams)
-        validated_params=self.validate_params(InputParams);
+        validated_params=self.validate_params(GenericParams);
         results = re_api.query("get_ancestors", validated_params)
 
-        returnVal={"stats": results["stats"], "results": results["results"]}
+        returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"]}
         #END get_ancestors
 
         # At some point might do deeper type checking...
@@ -138,27 +115,32 @@ class OntologyAPI:
         # return the results
         return [returnVal]
 
-    def get_children(self, ctx, InputParams):
+    def get_children(self, ctx, GenericParams):
         """
-        :param InputParams: instance of type "InputParams" (ID : name
-           space/ontology term id) -> structure: parameter "id" of type "ID"
-           (ID : name space/ontology term id), parameter "ts" of Long,
-           parameter "limit" of Long, parameter "offset" of Long
-        :returns: instance of type "Results" (* Generic results * stats -
-           Query execution information from ArangoDB. * results - array of
+        Retrieve children of an ontology term by ID
+        :param GenericParams: instance of type "GenericParams" (Generic
+           Parameters id - required - ontology term id, such as "GO:0000002"
+           ts - optional - fetch documents with this active timestamp,
+           defaults to now ns - optional - ontology namespace to use,
+           defaults to "go" limit - optional - number of results to return
+           (defaults to 20) offset - optional - number of results to skip
+           (defaults to 0)) -> structure: parameter "id" of type "ID" (ID :
+           ontology term id, such as "GO:0000002"), parameter "ts" of Long,
+           parameter "ns" of String, parameter "limit" of Long, parameter
+           "offset" of Long
+        :returns: instance of type "GenericResults" (Generic results stats -
+           Query execution information from ArangoDB. results - array of
            objects of results.) -> structure: parameter "stats" of
            unspecified object, parameter "results" of list of unspecified
-           object
+           object, parameter "ts" of Long
         """
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN get_children
-        print('Running get_children() with params=')
-        pprint(InputParams)
-        validated_params=self.validate_params(InputParams);
+        validated_params=self.validate_params(GenericParams);
         results = re_api.query("get_children", validated_params)
 
-        returnVal={"stats": results["stats"], "results": results["results"]}
+        returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"]}
         #END get_children
 
         # At some point might do deeper type checking...
@@ -168,27 +150,32 @@ class OntologyAPI:
         # return the results
         return [returnVal]
 
-    def get_parents(self, ctx, InputParams):
+    def get_parents(self, ctx, GenericParams):
         """
-        :param InputParams: instance of type "InputParams" (ID : name
-           space/ontology term id) -> structure: parameter "id" of type "ID"
-           (ID : name space/ontology term id), parameter "ts" of Long,
-           parameter "limit" of Long, parameter "offset" of Long
-        :returns: instance of type "Results" (* Generic results * stats -
-           Query execution information from ArangoDB. * results - array of
+        Retrieve parents of an ontology term by ID
+        :param GenericParams: instance of type "GenericParams" (Generic
+           Parameters id - required - ontology term id, such as "GO:0000002"
+           ts - optional - fetch documents with this active timestamp,
+           defaults to now ns - optional - ontology namespace to use,
+           defaults to "go" limit - optional - number of results to return
+           (defaults to 20) offset - optional - number of results to skip
+           (defaults to 0)) -> structure: parameter "id" of type "ID" (ID :
+           ontology term id, such as "GO:0000002"), parameter "ts" of Long,
+           parameter "ns" of String, parameter "limit" of Long, parameter
+           "offset" of Long
+        :returns: instance of type "GenericResults" (Generic results stats -
+           Query execution information from ArangoDB. results - array of
            objects of results.) -> structure: parameter "stats" of
            unspecified object, parameter "results" of list of unspecified
-           object
+           object, parameter "ts" of Long
         """
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN get_parents
-        print('Running get_parents() with params=')
-        pprint(InputParams)
-        validated_params=self.validate_params(InputParams);
+        validated_params=self.validate_params(GenericParams);
         results = re_api.query("get_parents", validated_params)
 
-        returnVal={"stats": results["stats"], "results": results["results"]}
+        returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"]}
         #END get_parents
 
         # At some point might do deeper type checking...
@@ -198,27 +185,32 @@ class OntologyAPI:
         # return the results
         return [returnVal]
 
-    def get_related(self, ctx, InputParams):
+    def get_related(self, ctx, GenericParams):
         """
-        :param InputParams: instance of type "InputParams" (ID : name
-           space/ontology term id) -> structure: parameter "id" of type "ID"
-           (ID : name space/ontology term id), parameter "ts" of Long,
-           parameter "limit" of Long, parameter "offset" of Long
-        :returns: instance of type "Results" (* Generic results * stats -
-           Query execution information from ArangoDB. * results - array of
+        Retrieve related terms of an ontology term by ID
+        :param GenericParams: instance of type "GenericParams" (Generic
+           Parameters id - required - ontology term id, such as "GO:0000002"
+           ts - optional - fetch documents with this active timestamp,
+           defaults to now ns - optional - ontology namespace to use,
+           defaults to "go" limit - optional - number of results to return
+           (defaults to 20) offset - optional - number of results to skip
+           (defaults to 0)) -> structure: parameter "id" of type "ID" (ID :
+           ontology term id, such as "GO:0000002"), parameter "ts" of Long,
+           parameter "ns" of String, parameter "limit" of Long, parameter
+           "offset" of Long
+        :returns: instance of type "GenericResults" (Generic results stats -
+           Query execution information from ArangoDB. results - array of
            objects of results.) -> structure: parameter "stats" of
            unspecified object, parameter "results" of list of unspecified
-           object
+           object, parameter "ts" of Long
         """
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN get_related
-        print('Running get_related() with params=')
-        pprint(InputParams)
-        validated_params=self.validate_params(InputParams);
+        validated_params=self.validate_params(GenericParams);
         results = re_api.query("get_related", validated_params)
 
-        returnVal={"stats": results["stats"], "results": results["results"]}
+        returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"]}
         #END get_related
 
         # At some point might do deeper type checking...
@@ -228,27 +220,32 @@ class OntologyAPI:
         # return the results
         return [returnVal]
 
-    def get_siblings(self, ctx, InputParams):
+    def get_siblings(self, ctx, GenericParams):
         """
-        :param InputParams: instance of type "InputParams" (ID : name
-           space/ontology term id) -> structure: parameter "id" of type "ID"
-           (ID : name space/ontology term id), parameter "ts" of Long,
-           parameter "limit" of Long, parameter "offset" of Long
-        :returns: instance of type "Results" (* Generic results * stats -
-           Query execution information from ArangoDB. * results - array of
+        Retrieve siblings terms of an ontology term by ID
+        :param GenericParams: instance of type "GenericParams" (Generic
+           Parameters id - required - ontology term id, such as "GO:0000002"
+           ts - optional - fetch documents with this active timestamp,
+           defaults to now ns - optional - ontology namespace to use,
+           defaults to "go" limit - optional - number of results to return
+           (defaults to 20) offset - optional - number of results to skip
+           (defaults to 0)) -> structure: parameter "id" of type "ID" (ID :
+           ontology term id, such as "GO:0000002"), parameter "ts" of Long,
+           parameter "ns" of String, parameter "limit" of Long, parameter
+           "offset" of Long
+        :returns: instance of type "GenericResults" (Generic results stats -
+           Query execution information from ArangoDB. results - array of
            objects of results.) -> structure: parameter "stats" of
            unspecified object, parameter "results" of list of unspecified
-           object
+           object, parameter "ts" of Long
         """
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN get_siblings
-        print('Running get_siblings() with params=')
-        pprint(InputParams)
-        validated_params=self.validate_params(InputParams);
+        validated_params=self.validate_params(GenericParams);
         results = re_api.query("get_siblings", validated_params)
 
-        returnVal={"stats": results["stats"], "results": results["results"]}
+        returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"]}
         #END get_siblings
 
         # At some point might do deeper type checking...
@@ -258,57 +255,65 @@ class OntologyAPI:
         # return the results
         return [returnVal]
 
-    def get_metadata(self, ctx, InputParams):
+    def get_terms(self, ctx, GetTermsParams):
         """
-        :param InputParams: instance of type "InputParams" (ID : name
-           space/ontology term id) -> structure: parameter "id" of type "ID"
-           (ID : name space/ontology term id), parameter "ts" of Long,
-           parameter "limit" of Long, parameter "offset" of Long
-        :returns: instance of type "Results" (* Generic results * stats -
-           Query execution information from ArangoDB. * results - array of
+        Retrieve metadata of a list of ontology terms by IDs
+        :param GetTermsParams: instance of type "GetTermsParams" (Parameters
+           for get_terms ids - required - a list of name ontology term id,
+           such as '["GO:0000002", "GO:0000266"]' ts - optional - fetch
+           documents with this active timestamp, defaults to now ns -
+           optional - ontology namespace to use, defaults to "go") ->
+           structure: parameter "ids" of list of type "ID" (ID : ontology
+           term id, such as "GO:0000002"), parameter "ts" of Long, parameter
+           "ns" of String
+        :returns: instance of type "GenericResults" (Generic results stats -
+           Query execution information from ArangoDB. results - array of
            objects of results.) -> structure: parameter "stats" of
            unspecified object, parameter "results" of list of unspecified
-           object
+           object, parameter "ts" of Long
         """
         # ctx is the context object
         # return variables are: returnVal
-        #BEGIN get_metadata
-        print('Running get_metadata() with params=')
-        pprint(InputParams)
-        validated_params=self.validate_params(InputParams);
-        results = re_api.query("get_metadata", validated_params)
+        #BEGIN get_terms
+        validated_params=self.validate_params(GetTermsParams, "get_terms");
+        results = re_api.query("get_terms", validated_params)
 
-        returnVal={"stats": results["stats"], "results": results["results"]}
-        #END get_metadata
+        returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"]}
+        #END get_terms
 
         # At some point might do deeper type checking...
         if not isinstance(returnVal, dict):
-            raise ValueError('Method get_metadata return value ' +
+            raise ValueError('Method get_terms return value ' +
                              'returnVal is not type dict as required.')
         # return the results
         return [returnVal]
 
-    def get_hierarchicalAncestors(self, ctx, InputParams):
+    def get_hierarchicalAncestors(self, ctx, GenericParams):
         """
-        :param InputParams: instance of type "InputParams" (ID : name
-           space/ontology term id) -> structure: parameter "id" of type "ID"
-           (ID : name space/ontology term id), parameter "ts" of Long,
-           parameter "limit" of Long, parameter "offset" of Long
-        :returns: instance of type "Results" (* Generic results * stats -
-           Query execution information from ArangoDB. * results - array of
+        Retrieve hierarchicalAncestors of an ontology term by ID
+        :param GenericParams: instance of type "GenericParams" (Generic
+           Parameters id - required - ontology term id, such as "GO:0000002"
+           ts - optional - fetch documents with this active timestamp,
+           defaults to now ns - optional - ontology namespace to use,
+           defaults to "go" limit - optional - number of results to return
+           (defaults to 20) offset - optional - number of results to skip
+           (defaults to 0)) -> structure: parameter "id" of type "ID" (ID :
+           ontology term id, such as "GO:0000002"), parameter "ts" of Long,
+           parameter "ns" of String, parameter "limit" of Long, parameter
+           "offset" of Long
+        :returns: instance of type "GenericResults" (Generic results stats -
+           Query execution information from ArangoDB. results - array of
            objects of results.) -> structure: parameter "stats" of
            unspecified object, parameter "results" of list of unspecified
-           object
+           object, parameter "ts" of Long
         """
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN get_hierarchicalAncestors
-        print('Running get_hierarchicalAncestors() with params=')
-        pprint(InputParams)
-        validated_params=self.validate_params(InputParams);
+        validated_params=self.validate_params(GenericParams);
         results = re_api.query("get_hierarchicalAncestors", validated_params)
 
-        returnVal={"stats": results["stats"], "results": results["results"]}
+        returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"]}
         #END get_hierarchicalAncestors
 
         # At some point might do deeper type checking...
@@ -318,27 +323,32 @@ class OntologyAPI:
         # return the results
         return [returnVal]
 
-    def get_hierarchicalChildren(self, ctx, InputParams):
+    def get_hierarchicalChildren(self, ctx, GenericParams):
         """
-        :param InputParams: instance of type "InputParams" (ID : name
-           space/ontology term id) -> structure: parameter "id" of type "ID"
-           (ID : name space/ontology term id), parameter "ts" of Long,
-           parameter "limit" of Long, parameter "offset" of Long
-        :returns: instance of type "Results" (* Generic results * stats -
-           Query execution information from ArangoDB. * results - array of
+        Retrieve hierarchicalChildren of an ontology term by ID
+        :param GenericParams: instance of type "GenericParams" (Generic
+           Parameters id - required - ontology term id, such as "GO:0000002"
+           ts - optional - fetch documents with this active timestamp,
+           defaults to now ns - optional - ontology namespace to use,
+           defaults to "go" limit - optional - number of results to return
+           (defaults to 20) offset - optional - number of results to skip
+           (defaults to 0)) -> structure: parameter "id" of type "ID" (ID :
+           ontology term id, such as "GO:0000002"), parameter "ts" of Long,
+           parameter "ns" of String, parameter "limit" of Long, parameter
+           "offset" of Long
+        :returns: instance of type "GenericResults" (Generic results stats -
+           Query execution information from ArangoDB. results - array of
            objects of results.) -> structure: parameter "stats" of
            unspecified object, parameter "results" of list of unspecified
-           object
+           object, parameter "ts" of Long
         """
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN get_hierarchicalChildren
-        print('Running get_hierarchicalChildren() with params=')
-        pprint(InputParams)
-        validated_params=self.validate_params(InputParams);
+        validated_params=self.validate_params(GenericParams);
         results = re_api.query("get_hierarchicalChildren", validated_params)
 
-        returnVal={"stats": results["stats"], "results": results["results"]}
+        returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"]}
         #END get_hierarchicalChildren
 
         # At some point might do deeper type checking...
@@ -348,27 +358,32 @@ class OntologyAPI:
         # return the results
         return [returnVal]
 
-    def get_hierarchicalDescendants(self, ctx, InputParams):
+    def get_hierarchicalDescendants(self, ctx, GenericParams):
         """
-        :param InputParams: instance of type "InputParams" (ID : name
-           space/ontology term id) -> structure: parameter "id" of type "ID"
-           (ID : name space/ontology term id), parameter "ts" of Long,
-           parameter "limit" of Long, parameter "offset" of Long
-        :returns: instance of type "Results" (* Generic results * stats -
-           Query execution information from ArangoDB. * results - array of
+        Retrieve hierarchicalDescendants of an ontology term by ID
+        :param GenericParams: instance of type "GenericParams" (Generic
+           Parameters id - required - ontology term id, such as "GO:0000002"
+           ts - optional - fetch documents with this active timestamp,
+           defaults to now ns - optional - ontology namespace to use,
+           defaults to "go" limit - optional - number of results to return
+           (defaults to 20) offset - optional - number of results to skip
+           (defaults to 0)) -> structure: parameter "id" of type "ID" (ID :
+           ontology term id, such as "GO:0000002"), parameter "ts" of Long,
+           parameter "ns" of String, parameter "limit" of Long, parameter
+           "offset" of Long
+        :returns: instance of type "GenericResults" (Generic results stats -
+           Query execution information from ArangoDB. results - array of
            objects of results.) -> structure: parameter "stats" of
            unspecified object, parameter "results" of list of unspecified
-           object
+           object, parameter "ts" of Long
         """
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN get_hierarchicalDescendants
-        print('Running get_hierarchicalDescendants() with params=')
-        pprint(InputParams)
-        validated_params=self.validate_params(InputParams);
+        validated_params=self.validate_params(GenericParams);
         results = re_api.query("get_hierarchicalDescendants", validated_params)
 
-        returnVal={"stats": results["stats"], "results": results["results"]}
+        returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"]}
         #END get_hierarchicalDescendants
 
         # At some point might do deeper type checking...
@@ -378,27 +393,32 @@ class OntologyAPI:
         # return the results
         return [returnVal]
 
-    def get_hierarchicalParents(self, ctx, InputParams):
+    def get_hierarchicalParents(self, ctx, GenericParams):
         """
-        :param InputParams: instance of type "InputParams" (ID : name
-           space/ontology term id) -> structure: parameter "id" of type "ID"
-           (ID : name space/ontology term id), parameter "ts" of Long,
-           parameter "limit" of Long, parameter "offset" of Long
-        :returns: instance of type "Results" (* Generic results * stats -
-           Query execution information from ArangoDB. * results - array of
+        Retrieve hierarchicalParents of an ontology term by ID
+        :param GenericParams: instance of type "GenericParams" (Generic
+           Parameters id - required - ontology term id, such as "GO:0000002"
+           ts - optional - fetch documents with this active timestamp,
+           defaults to now ns - optional - ontology namespace to use,
+           defaults to "go" limit - optional - number of results to return
+           (defaults to 20) offset - optional - number of results to skip
+           (defaults to 0)) -> structure: parameter "id" of type "ID" (ID :
+           ontology term id, such as "GO:0000002"), parameter "ts" of Long,
+           parameter "ns" of String, parameter "limit" of Long, parameter
+           "offset" of Long
+        :returns: instance of type "GenericResults" (Generic results stats -
+           Query execution information from ArangoDB. results - array of
            objects of results.) -> structure: parameter "stats" of
            unspecified object, parameter "results" of list of unspecified
-           object
+           object, parameter "ts" of Long
         """
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN get_hierarchicalParents
-        print('Running get_hierarchicalParents() with params=')
-        pprint(InputParams)
-        validated_params=self.validate_params(InputParams);
+        validated_params=self.validate_params(GenericParams);
         results = re_api.query("get_hierarchicalParents", validated_params)
 
-        returnVal={"stats": results["stats"], "results": results["results"]}
+        returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"]}
         #END get_hierarchicalParents
 
         # At some point might do deeper type checking...
