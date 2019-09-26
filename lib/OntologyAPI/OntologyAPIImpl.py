@@ -24,9 +24,9 @@ class OntologyAPI:
     # state. A method could easily clobber the state set by another while
     # the latter method is running.
     ######################################### noqa
-    VERSION = "0.0.1"
-    GIT_URL = "https://github.com/kbaseapps/ontology_api"
-    GIT_COMMIT_HASH = "3e11237bcf2d04f0e1d6a0a8aa889407e41a5c9e"
+    VERSION = "0.1.0"
+    GIT_URL = "git@github.com:kbaseapps/ontology_api.git"
+    GIT_COMMIT_HASH = "d2d01f01d8a24e9e9cef8c1ff0cb91360246729c"
 
     #BEGIN_CLASS_HEADER
     def validate_params(self, params, schema='default'):
@@ -60,9 +60,11 @@ class OntologyAPI:
            "offset" of Long
         :returns: instance of type "GenericResults" (Generic results stats -
            Query execution information from ArangoDB. results - array of
-           objects of results.) -> structure: parameter "stats" of
-           unspecified object, parameter "results" of list of unspecified
-           object, parameter "ts" of Long
+           objects of results. ts - Timestamp used in the request ns -
+           Ontology namespace used in the request.) -> structure: parameter
+           "stats" of unspecified object, parameter "results" of list of
+           unspecified object, parameter "ts" of Long, parameter "ns" of
+           String
         """
         # ctx is the context object
         # return variables are: returnVal
@@ -70,7 +72,7 @@ class OntologyAPI:
         validated_params=self.validate_params(GenericParams);
         results = re_api.query("get_descendants", validated_params)
 
-        returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"]}
+        returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
         #END get_descendants
 
         # At some point might do deeper type checking...
@@ -95,9 +97,11 @@ class OntologyAPI:
            "offset" of Long
         :returns: instance of type "GenericResults" (Generic results stats -
            Query execution information from ArangoDB. results - array of
-           objects of results.) -> structure: parameter "stats" of
-           unspecified object, parameter "results" of list of unspecified
-           object, parameter "ts" of Long
+           objects of results. ts - Timestamp used in the request ns -
+           Ontology namespace used in the request.) -> structure: parameter
+           "stats" of unspecified object, parameter "results" of list of
+           unspecified object, parameter "ts" of Long, parameter "ns" of
+           String
         """
         # ctx is the context object
         # return variables are: returnVal
@@ -105,7 +109,7 @@ class OntologyAPI:
         validated_params=self.validate_params(GenericParams);
         results = re_api.query("get_ancestors", validated_params)
 
-        returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"]}
+        returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
         #END get_ancestors
 
         # At some point might do deeper type checking...
@@ -130,9 +134,11 @@ class OntologyAPI:
            "offset" of Long
         :returns: instance of type "GenericResults" (Generic results stats -
            Query execution information from ArangoDB. results - array of
-           objects of results.) -> structure: parameter "stats" of
-           unspecified object, parameter "results" of list of unspecified
-           object, parameter "ts" of Long
+           objects of results. ts - Timestamp used in the request ns -
+           Ontology namespace used in the request.) -> structure: parameter
+           "stats" of unspecified object, parameter "results" of list of
+           unspecified object, parameter "ts" of Long, parameter "ns" of
+           String
         """
         # ctx is the context object
         # return variables are: returnVal
@@ -140,7 +146,7 @@ class OntologyAPI:
         validated_params=self.validate_params(GenericParams);
         results = re_api.query("get_children", validated_params)
 
-        returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"]}
+        returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
         #END get_children
 
         # At some point might do deeper type checking...
@@ -165,9 +171,11 @@ class OntologyAPI:
            "offset" of Long
         :returns: instance of type "GenericResults" (Generic results stats -
            Query execution information from ArangoDB. results - array of
-           objects of results.) -> structure: parameter "stats" of
-           unspecified object, parameter "results" of list of unspecified
-           object, parameter "ts" of Long
+           objects of results. ts - Timestamp used in the request ns -
+           Ontology namespace used in the request.) -> structure: parameter
+           "stats" of unspecified object, parameter "results" of list of
+           unspecified object, parameter "ts" of Long, parameter "ns" of
+           String
         """
         # ctx is the context object
         # return variables are: returnVal
@@ -175,7 +183,7 @@ class OntologyAPI:
         validated_params=self.validate_params(GenericParams);
         results = re_api.query("get_parents", validated_params)
 
-        returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"]}
+        returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
         #END get_parents
 
         # At some point might do deeper type checking...
@@ -200,9 +208,11 @@ class OntologyAPI:
            "offset" of Long
         :returns: instance of type "GenericResults" (Generic results stats -
            Query execution information from ArangoDB. results - array of
-           objects of results.) -> structure: parameter "stats" of
-           unspecified object, parameter "results" of list of unspecified
-           object, parameter "ts" of Long
+           objects of results. ts - Timestamp used in the request ns -
+           Ontology namespace used in the request.) -> structure: parameter
+           "stats" of unspecified object, parameter "results" of list of
+           unspecified object, parameter "ts" of Long, parameter "ns" of
+           String
         """
         # ctx is the context object
         # return variables are: returnVal
@@ -210,7 +220,7 @@ class OntologyAPI:
         validated_params=self.validate_params(GenericParams);
         results = re_api.query("get_related", validated_params)
 
-        returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"]}
+        returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
         #END get_related
 
         # At some point might do deeper type checking...
@@ -235,9 +245,11 @@ class OntologyAPI:
            "offset" of Long
         :returns: instance of type "GenericResults" (Generic results stats -
            Query execution information from ArangoDB. results - array of
-           objects of results.) -> structure: parameter "stats" of
-           unspecified object, parameter "results" of list of unspecified
-           object, parameter "ts" of Long
+           objects of results. ts - Timestamp used in the request ns -
+           Ontology namespace used in the request.) -> structure: parameter
+           "stats" of unspecified object, parameter "results" of list of
+           unspecified object, parameter "ts" of Long, parameter "ns" of
+           String
         """
         # ctx is the context object
         # return variables are: returnVal
@@ -245,7 +257,7 @@ class OntologyAPI:
         validated_params=self.validate_params(GenericParams);
         results = re_api.query("get_siblings", validated_params)
 
-        returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"]}
+        returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
         #END get_siblings
 
         # At some point might do deeper type checking...
@@ -268,9 +280,11 @@ class OntologyAPI:
            "ns" of String
         :returns: instance of type "GenericResults" (Generic results stats -
            Query execution information from ArangoDB. results - array of
-           objects of results.) -> structure: parameter "stats" of
-           unspecified object, parameter "results" of list of unspecified
-           object, parameter "ts" of Long
+           objects of results. ts - Timestamp used in the request ns -
+           Ontology namespace used in the request.) -> structure: parameter
+           "stats" of unspecified object, parameter "results" of list of
+           unspecified object, parameter "ts" of Long, parameter "ns" of
+           String
         """
         # ctx is the context object
         # return variables are: returnVal
@@ -278,7 +292,7 @@ class OntologyAPI:
         validated_params=self.validate_params(GetTermsParams, "get_terms");
         results = re_api.query("get_terms", validated_params)
 
-        returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"]}
+        returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
         #END get_terms
 
         # At some point might do deeper type checking...
@@ -303,9 +317,11 @@ class OntologyAPI:
            "offset" of Long
         :returns: instance of type "GenericResults" (Generic results stats -
            Query execution information from ArangoDB. results - array of
-           objects of results.) -> structure: parameter "stats" of
-           unspecified object, parameter "results" of list of unspecified
-           object, parameter "ts" of Long
+           objects of results. ts - Timestamp used in the request ns -
+           Ontology namespace used in the request.) -> structure: parameter
+           "stats" of unspecified object, parameter "results" of list of
+           unspecified object, parameter "ts" of Long, parameter "ns" of
+           String
         """
         # ctx is the context object
         # return variables are: returnVal
@@ -313,7 +329,7 @@ class OntologyAPI:
         validated_params=self.validate_params(GenericParams);
         results = re_api.query("get_hierarchicalAncestors", validated_params)
 
-        returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"]}
+        returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
         #END get_hierarchicalAncestors
 
         # At some point might do deeper type checking...
@@ -338,9 +354,11 @@ class OntologyAPI:
            "offset" of Long
         :returns: instance of type "GenericResults" (Generic results stats -
            Query execution information from ArangoDB. results - array of
-           objects of results.) -> structure: parameter "stats" of
-           unspecified object, parameter "results" of list of unspecified
-           object, parameter "ts" of Long
+           objects of results. ts - Timestamp used in the request ns -
+           Ontology namespace used in the request.) -> structure: parameter
+           "stats" of unspecified object, parameter "results" of list of
+           unspecified object, parameter "ts" of Long, parameter "ns" of
+           String
         """
         # ctx is the context object
         # return variables are: returnVal
@@ -348,7 +366,7 @@ class OntologyAPI:
         validated_params=self.validate_params(GenericParams);
         results = re_api.query("get_hierarchicalChildren", validated_params)
 
-        returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"]}
+        returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
         #END get_hierarchicalChildren
 
         # At some point might do deeper type checking...
@@ -373,9 +391,11 @@ class OntologyAPI:
            "offset" of Long
         :returns: instance of type "GenericResults" (Generic results stats -
            Query execution information from ArangoDB. results - array of
-           objects of results.) -> structure: parameter "stats" of
-           unspecified object, parameter "results" of list of unspecified
-           object, parameter "ts" of Long
+           objects of results. ts - Timestamp used in the request ns -
+           Ontology namespace used in the request.) -> structure: parameter
+           "stats" of unspecified object, parameter "results" of list of
+           unspecified object, parameter "ts" of Long, parameter "ns" of
+           String
         """
         # ctx is the context object
         # return variables are: returnVal
@@ -383,7 +403,7 @@ class OntologyAPI:
         validated_params=self.validate_params(GenericParams);
         results = re_api.query("get_hierarchicalDescendants", validated_params)
 
-        returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"]}
+        returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
         #END get_hierarchicalDescendants
 
         # At some point might do deeper type checking...
@@ -408,9 +428,11 @@ class OntologyAPI:
            "offset" of Long
         :returns: instance of type "GenericResults" (Generic results stats -
            Query execution information from ArangoDB. results - array of
-           objects of results.) -> structure: parameter "stats" of
-           unspecified object, parameter "results" of list of unspecified
-           object, parameter "ts" of Long
+           objects of results. ts - Timestamp used in the request ns -
+           Ontology namespace used in the request.) -> structure: parameter
+           "stats" of unspecified object, parameter "results" of list of
+           unspecified object, parameter "ts" of Long, parameter "ns" of
+           String
         """
         # ctx is the context object
         # return variables are: returnVal
@@ -418,7 +440,7 @@ class OntologyAPI:
         validated_params=self.validate_params(GenericParams);
         results = re_api.query("get_hierarchicalParents", validated_params)
 
-        returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"]}
+        returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
         #END get_hierarchicalParents
 
         # At some point might do deeper type checking...

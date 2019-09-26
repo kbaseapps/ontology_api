@@ -9,8 +9,7 @@ def get_config():
     config = {
         're_url': os.environ.get('KBASE_ENDPOINT', 'https://ci.kbase.us/services').strip('/') + '/relation_engine_api',
         'ns': {
-            'go': 'GO',
-            'default': 'GO'
+            'go': 'GO'
         }
     }
     return config

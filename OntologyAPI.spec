@@ -44,11 +44,14 @@ module OntologyAPI {
       Generic results
       stats - Query execution information from ArangoDB.
       results - array of objects of results.
+      ts - Timestamp used in the request
+      ns - Ontology namespace used in the request.
     */
     typedef structure {
         UnspecifiedObject stats;
         list<UnspecifiedObject> results;
         int ts;
+        string ns;
     } GenericResults;
 
     /* Retrieve descendants of an ontology term by ID*/
