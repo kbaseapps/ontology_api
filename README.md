@@ -39,7 +39,10 @@ items:
   properties:
     ts:
       type: integer
-      title: Timestamp used in the request, default is current time
+      title: Timestamp used in the request
+    ns:
+      type: string
+      title: Ontology namespace used in the request
     stats:
       type: object
       description: RE query execution meta-info
