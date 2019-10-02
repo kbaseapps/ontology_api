@@ -75,15 +75,15 @@ module OntologyAPI {
     /* Retrieve metadata of a list of ontology terms by IDs*/
     funcdef get_terms(GetTermsParams) returns (GenericResults) authentication optional;
 
-    /* Retrieve hierarchicalAncestors of an ontology term by ID*/
-    funcdef get_hierarchicalAncestors(GenericParams) returns (GenericResults) authentication optional;
+    /* Retrieve hierarchical_ancestors of an ontology term by ID*/
+    funcdef get_hierarchical_ancestors(GenericParams) returns (GenericResults) authentication optional;
 
-    /* Retrieve hierarchicalChildren of an ontology term by ID*/
-    funcdef get_hierarchicalChildren(GenericParams) returns (GenericResults) authentication optional;
+    /* Retrieve hierarchical_children of an ontology term by ID*/
+    funcdef get_hierarchical_children(GenericParams) returns (GenericResults) authentication optional;
 
-    /* Retrieve hierarchicalDescendants of an ontology term by ID*/
-    funcdef get_hierarchicalDescendants(GenericParams) returns (GenericResults) authentication optional;
+    /* Retrieve hierarchical_descendants of an ontology term by ID*/
+    funcdef get_hierarchical_descendants(GenericParams) returns (GenericResults) authentication optional;
 
-    /* Retrieve hierarchicalParents of an ontology term by ID*/
-    funcdef get_hierarchicalParents(GenericParams) returns (GenericResults) authentication optional;
+    /* Retrieve hierarchical_parents of an ontology term by ID*/
+    funcdef get_hierarchical_parents(GenericParams) returns (GenericResults) authentication optional;
 };

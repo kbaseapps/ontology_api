@@ -177,42 +177,42 @@ items:
         description: Ontology term data; Standard RE database fields, plus all additional document-specific fields.
 ```
 
-### get_hierarchicalDescendants
+### get_hierarchical_descendants
 
-Retrieve the hierarchicalDescendants of an ontolgy term
+Retrieve the hierarchical_descendants of an ontolgy term
 
 Example:
-ret = OntologyAPI.get_hierarchicalDescendants(self.ctx, {"id": "GO:0000002, "ts":1568820853135})
+ret = OntologyAPI.get_hierarchical_descendants(self.ctx, {"id": "GO:0000002, "ts":1568820853135})
 
 See the **Params** section for params schema.
 See the **Result** section for result schema.
 
-### get_hierarchicalAncestors
+### get_hierarchical_ancestors
 
-Retrieve the hierarchicalAncestors of an ontolgy term
+Retrieve the hierarchical_ancestors of an ontolgy term
 
 Example:
-ret = OntologyAPI.get_hierarchicalAncestors(self.ctx, {"id": "GO:0000002, "ts":1568820853135})
+ret = OntologyAPI.get_hierarchical_ancestors(self.ctx, {"id": "GO:0000002, "ts":1568820853135})
 
 See the **Params** section for params schema.
 See the **Result** section for result schema.
 
-### get_hierarchicalChildren
+### get_hierarchical_children
 
-Retrieve the hierarchicalChildren of an ontolgy term
+Retrieve the hierarchical_children of an ontolgy term
 
 Example:
-ret = OntologyAPI.get_hierarchicalChildren(self.ctx, {"id": "GO:0000002, "ts":1568820853135})
+ret = OntologyAPI.get_hierarchical_children(self.ctx, {"id": "GO:0000002, "ts":1568820853135})
 
 See the **Params** section for params schema.
 See the **Result** section for result schema.
 
-### get_hierarchicalParents
+### get_hierarchical_parents
 
-Retrieve the hierarchicalParents of an ontolgy term
+Retrieve the hierarchical_parents of an ontolgy term
 
 Example:
-ret = OntologyAPI.get_hierarchicalParents(self.ctx, {"id": "GO:0000002, "ts":1568820853135})
+ret = OntologyAPI.get_hierarchical_parents(self.ctx, {"id": "GO:0000002, "ts":1568820853135})
 
 See the **Params** section for params schema.
 See the **Result** section for result schema.

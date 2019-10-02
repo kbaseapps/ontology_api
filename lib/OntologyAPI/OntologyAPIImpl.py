@@ -26,7 +26,7 @@ class OntologyAPI:
     ######################################### noqa
     VERSION = "0.1.0"
     GIT_URL = "git@github.com:kbaseapps/ontology_api.git"
-    GIT_COMMIT_HASH = "d2d01f01d8a24e9e9cef8c1ff0cb91360246729c"
+    GIT_COMMIT_HASH = "e20d25d81d81722a5dd97adaf87d5cc083f36756"
 
     #BEGIN_CLASS_HEADER
     def validate_params(self, params, schema='default'):
@@ -302,9 +302,9 @@ class OntologyAPI:
         # return the results
         return [returnVal]
 
-    def get_hierarchicalAncestors(self, ctx, GenericParams):
+    def get_hierarchical_ancestors(self, ctx, GenericParams):
         """
-        Retrieve hierarchicalAncestors of an ontology term by ID
+        Retrieve hierarchical_ancestors of an ontology term by ID
         :param GenericParams: instance of type "GenericParams" (Generic
            Parameters id - required - ontology term id, such as "GO:0000002"
            ts - optional - fetch documents with this active timestamp,
@@ -325,23 +325,23 @@ class OntologyAPI:
         """
         # ctx is the context object
         # return variables are: returnVal
-        #BEGIN get_hierarchicalAncestors
+        #BEGIN get_hierarchical_ancestors
         validated_params=self.validate_params(GenericParams);
         results = re_api.query("get_hierarchicalAncestors", validated_params)
 
         returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
-        #END get_hierarchicalAncestors
+        #END get_hierarchical_ancestors
 
         # At some point might do deeper type checking...
         if not isinstance(returnVal, dict):
-            raise ValueError('Method get_hierarchicalAncestors return value ' +
+            raise ValueError('Method get_hierarchical_ancestors return value ' +
                              'returnVal is not type dict as required.')
         # return the results
         return [returnVal]
 
-    def get_hierarchicalChildren(self, ctx, GenericParams):
+    def get_hierarchical_children(self, ctx, GenericParams):
         """
-        Retrieve hierarchicalChildren of an ontology term by ID
+        Retrieve hierarchical_children of an ontology term by ID
         :param GenericParams: instance of type "GenericParams" (Generic
            Parameters id - required - ontology term id, such as "GO:0000002"
            ts - optional - fetch documents with this active timestamp,
@@ -362,23 +362,23 @@ class OntologyAPI:
         """
         # ctx is the context object
         # return variables are: returnVal
-        #BEGIN get_hierarchicalChildren
+        #BEGIN get_hierarchical_children
         validated_params=self.validate_params(GenericParams);
         results = re_api.query("get_hierarchicalChildren", validated_params)
 
         returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
-        #END get_hierarchicalChildren
+        #END get_hierarchical_children
 
         # At some point might do deeper type checking...
         if not isinstance(returnVal, dict):
-            raise ValueError('Method get_hierarchicalChildren return value ' +
+            raise ValueError('Method get_hierarchical_children return value ' +
                              'returnVal is not type dict as required.')
         # return the results
         return [returnVal]
 
-    def get_hierarchicalDescendants(self, ctx, GenericParams):
+    def get_hierarchical_descendants(self, ctx, GenericParams):
         """
-        Retrieve hierarchicalDescendants of an ontology term by ID
+        Retrieve hierarchical_descendants of an ontology term by ID
         :param GenericParams: instance of type "GenericParams" (Generic
            Parameters id - required - ontology term id, such as "GO:0000002"
            ts - optional - fetch documents with this active timestamp,
@@ -399,23 +399,23 @@ class OntologyAPI:
         """
         # ctx is the context object
         # return variables are: returnVal
-        #BEGIN get_hierarchicalDescendants
+        #BEGIN get_hierarchical_descendants
         validated_params=self.validate_params(GenericParams);
         results = re_api.query("get_hierarchicalDescendants", validated_params)
 
         returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
-        #END get_hierarchicalDescendants
+        #END get_hierarchical_descendants
 
         # At some point might do deeper type checking...
         if not isinstance(returnVal, dict):
-            raise ValueError('Method get_hierarchicalDescendants return value ' +
+            raise ValueError('Method get_hierarchical_descendants return value ' +
                              'returnVal is not type dict as required.')
         # return the results
         return [returnVal]
 
-    def get_hierarchicalParents(self, ctx, GenericParams):
+    def get_hierarchical_parents(self, ctx, GenericParams):
         """
-        Retrieve hierarchicalParents of an ontology term by ID
+        Retrieve hierarchical_parents of an ontology term by ID
         :param GenericParams: instance of type "GenericParams" (Generic
            Parameters id - required - ontology term id, such as "GO:0000002"
            ts - optional - fetch documents with this active timestamp,
@@ -436,16 +436,16 @@ class OntologyAPI:
         """
         # ctx is the context object
         # return variables are: returnVal
-        #BEGIN get_hierarchicalParents
+        #BEGIN get_hierarchical_parents
         validated_params=self.validate_params(GenericParams);
         results = re_api.query("get_hierarchicalParents", validated_params)
 
         returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
-        #END get_hierarchicalParents
+        #END get_hierarchical_parents
 
         # At some point might do deeper type checking...
         if not isinstance(returnVal, dict):
-            raise ValueError('Method get_hierarchicalParents return value ' +
+            raise ValueError('Method get_hierarchical_parents return value ' +
                              'returnVal is not type dict as required.')
         # return the results
         return [returnVal]

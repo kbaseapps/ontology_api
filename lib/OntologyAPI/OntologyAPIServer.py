@@ -366,22 +366,22 @@ class Application(object):
                              name='OntologyAPI.get_terms',
                              types=[dict])
         self.method_authentication['OntologyAPI.get_terms'] = 'optional'  # noqa
-        self.rpc_service.add(impl_OntologyAPI.get_hierarchicalAncestors,
-                             name='OntologyAPI.get_hierarchicalAncestors',
+        self.rpc_service.add(impl_OntologyAPI.get_hierarchical_ancestors,
+                             name='OntologyAPI.get_hierarchical_ancestors',
                              types=[dict])
-        self.method_authentication['OntologyAPI.get_hierarchicalAncestors'] = 'optional'  # noqa
-        self.rpc_service.add(impl_OntologyAPI.get_hierarchicalChildren,
-                             name='OntologyAPI.get_hierarchicalChildren',
+        self.method_authentication['OntologyAPI.get_hierarchical_ancestors'] = 'optional'  # noqa
+        self.rpc_service.add(impl_OntologyAPI.get_hierarchical_children,
+                             name='OntologyAPI.get_hierarchical_children',
                              types=[dict])
-        self.method_authentication['OntologyAPI.get_hierarchicalChildren'] = 'optional'  # noqa
-        self.rpc_service.add(impl_OntologyAPI.get_hierarchicalDescendants,
-                             name='OntologyAPI.get_hierarchicalDescendants',
+        self.method_authentication['OntologyAPI.get_hierarchical_children'] = 'optional'  # noqa
+        self.rpc_service.add(impl_OntologyAPI.get_hierarchical_descendants,
+                             name='OntologyAPI.get_hierarchical_descendants',
                              types=[dict])
-        self.method_authentication['OntologyAPI.get_hierarchicalDescendants'] = 'optional'  # noqa
-        self.rpc_service.add(impl_OntologyAPI.get_hierarchicalParents,
-                             name='OntologyAPI.get_hierarchicalParents',
+        self.method_authentication['OntologyAPI.get_hierarchical_descendants'] = 'optional'  # noqa
+        self.rpc_service.add(impl_OntologyAPI.get_hierarchical_parents,
+                             name='OntologyAPI.get_hierarchical_parents',
                              types=[dict])
-        self.method_authentication['OntologyAPI.get_hierarchicalParents'] = 'optional'  # noqa
+        self.method_authentication['OntologyAPI.get_hierarchical_parents'] = 'optional'  # noqa
         self.rpc_service.add(impl_OntologyAPI.status,
                              name='OntologyAPI.status',
                              types=[dict])
