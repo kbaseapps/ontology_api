@@ -100,22 +100,22 @@ class OntologyAPITest(unittest.TestCase):
         returnVal=list(map(lambda x: x["id"], ret[0]["results"]))
         self.assertEqual(returnVal, ['GO:0000266', 'GO:0000002'])
 
-    def test_get_hierarchicalAncestors(self):
-        ret = self.serviceImpl.get_hierarchicalAncestors(self.ctx, {"id": "GO:0000002"})
+    def test_get_hierarchical_ancestors(self):
+        ret = self.serviceImpl.get_hierarchical_ancestors(self.ctx, {"id": "GO:0000002"})
         returnVal=list(map(lambda x: x["term"]["id"], ret[0]["results"]))
         self.assertEqual(returnVal, [ "GO:0006996", "GO:0007005", "GO:0008150", "GO:0008150", "GO:0009987", "GO:0016043", "GO:0071840"])
 
-    def test_get_hierarchicalChildren(self):
-        ret = self.serviceImpl.get_hierarchicalChildren(self.ctx, {"id": "GO:0000002"})
+    def test_get_hierarchical_children(self):
+        ret = self.serviceImpl.get_hierarchical_children(self.ctx, {"id": "GO:0000002"})
         returnVal=list(map(lambda x: x["term"]["id"], ret[0]["results"]))
         self.assertEqual(returnVal, ['GO:0032042', 'GO:0033955'])
 
-    def test_get_hierarchicalDescendants(self):
-        ret = self.serviceImpl.get_hierarchicalDescendants(self.ctx, {"id": "GO:0000002"})
+    def test_get_hierarchical_descendants(self):
+        ret = self.serviceImpl.get_hierarchical_descendants(self.ctx, {"id": "GO:0000002"})
         returnVal=list(map(lambda x: x["term"]["id"], ret[0]["results"]))
         self.assertEqual(returnVal, ['GO:0032042', 'GO:0032043', 'GO:0033955', 'GO:0043504', 'GO:1901858', 'GO:1901859', 'GO:1901859', 'GO:1901860', 'GO:1901860', 'GO:1905951'])
 
-    def test_get_hierarchicalParents(self):
-        ret = self.serviceImpl.get_hierarchicalParents(self.ctx, {"id": "GO:0000002"})
+    def test_get_hierarchical_parents(self):
+        ret = self.serviceImpl.get_hierarchical_parents(self.ctx, {"id": "GO:0000002"})
         returnVal=list(map(lambda x: x["term"]["id"], ret[0]["results"]))
         self.assertEqual(returnVal, ['GO:0007005'])
