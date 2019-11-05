@@ -52,11 +52,11 @@ items:
         type: object
         properties:
           edge:
-            type: onject
+            type: object
             additionalProperties: true
             description: Ontology term relation edge data; Standard RE database fields, plus all additional document-specific fields.
           term:
-            type: onject
+            type: object
             additionalProperties: true
             description: Ontology term data; Standard RE database fields, plus all additional document-specific fields.
 ```
@@ -153,6 +153,8 @@ properties:
       maxItems: 10000
   ts:
     type: integer
+  ns:
+    type: string
 ```
 
 It has following reult schema:
@@ -166,6 +168,9 @@ items:
     ts:
       type: integer
       title: Timestamp used in the request, default is current time
+    ns:
+      type: string
+      title: Ontology namespace used in the request
     stats:
       type: object
       description: RE query execution meta-info
@@ -216,6 +221,179 @@ ret = OntologyAPI.get_hierarchical_parents(self.ctx, {"id": "GO:0000002, "ts":15
 
 See the **Params** section for params schema.
 See the **Result** section for result schema.
+
+### get_associated_ws_objects
+
+Retrieve associated workspace objects of an ontology term
+
+Example:
+ret = OntologyAPI.get_associated_ws_objects(self.ctx, {"id": "GO:0016209"})
+
+See the **Params** section for params schema.
+
+It has following reult schema:
+```yaml
+type: array
+minItems: 1
+maxItems: 1
+items:
+  type: object
+  properties:
+    ts:
+      type: integer
+      title: Timestamp used in the request, default is current time
+    ns:
+      type: string
+      title: Ontology namespace used in the request
+    stats:
+      type: object
+      description: RE query execution meta-info
+    results:
+      type: array
+      items:
+        type: object
+        properties:
+          ws_obj:
+            type: object
+            description: workspace object
+            properties:
+              workspace_id: 
+                type: integer
+              object_id:
+                type: integer
+              version:
+                type: integer
+              name:
+                type: string
+          features:
+            type: array
+            items:
+              type: object
+              description: workspace feature 
+              properties:
+                feature_id:
+                  type: string
+                updated_at:
+                  type: integer
+```
+
+### get_terms_from_ws_feature
+
+Retrieve ontology terms of an workspace genome feature by genome obj_ref and feature id
+
+Example:
+ret = OntologyAPI.get_terms_from_ws_feature(self.ctx, {"obj_ref": "44640/9/1", "feature_id": "b3908"})
+
+It has following params schema:
+```yaml
+type: object
+required: ['obj_ref', 'feature_id']
+properties:
+  obj_ref:
+    type: string
+    description: workspace object ref
+  feature_id:
+    type: string
+    description: workspace feature id
+  ts:
+    type: integer
+  ns:
+    type: string
+```
+
+It has following reult schema:
+```yaml
+type: array
+minItems: 1
+maxItems: 1
+items:
+  type: object
+  properties:
+    ts:
+      type: integer
+      title: Timestamp used in the request, default is current time
+    ns:
+      type: string
+      title: Ontology namespace used in the request
+    stats:
+      type: object
+      description: RE query execution meta-info
+    results:
+      type: array
+      items:
+        type: object
+        properties:
+          feature:
+            type: object
+            description: workspace feature
+            properties:
+              feature_id:
+                type: string
+              workspace_id: 
+                type: integer
+              object_id:
+                type: integer
+              version:
+                type: integer
+              updated_at:
+                type: integer
+          terms:
+            type: array
+            items:
+              type: object
+              description: Onyology term 
+              properties:
+                name:
+                  type: string
+                namespace:
+                  type: string
+                alt_ids:
+                  type: array
+                  items:
+                    type: string
+                    description: alternative id
+                def:
+                  type: object
+                  descriptionL definition
+                comments:
+                  type: array
+                  items:
+                    type: string
+                synonyms:
+                  type: array
+                  items:
+                    type: object
+                xrefs:
+                  type: array
+                  items:
+                    type: object
+                created:
+                  type: integer
+                expired:
+                  type: integer
+```
+
+### get_terms_from_ws_obj
+
+Retrieve ontology terms of an workspace object by workspace obj_ref
+
+Example:
+ret = OntologyAPI.get_terms_from_ws_obj(self.ctx, {"obj_ref": "44640/9/1"})
+
+It has following params schema:
+```yaml
+type: object
+required: ['obj_ref']
+properties:
+  obj_ref:
+    type: string
+    description: workspace object ref
+  ts:
+    type: integer
+  ns:
+    type: string
+```
+See the **get_terms_from_ws_feature** section for result schema.
 
 # Installation from another module
 

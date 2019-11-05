@@ -64,7 +64,7 @@ class OntologyAPITest(unittest.TestCase):
     def test_get_descendants(self):
         ret = self.serviceImpl.get_descendants(self.ctx, {"id": "GO:0000002"})
         returnVal=list(map(lambda x: x["term"]["id"], ret[0]["results"]))
-        self.assertEqual(returnVal, ["GO:0033955"])
+        self.assertTrue(set(["GO:0033955"]).issubset(set(returnVal)))
         with self.assertRaises(InvalidParamsError):
             self.serviceImpl.get_descendants(self.ctx, {"key": "GO:0000002"})
         with self.assertRaises(InvalidParamsError):
@@ -73,49 +73,64 @@ class OntologyAPITest(unittest.TestCase):
     def test_get_ancestors(self):
         ret = self.serviceImpl.get_ancestors(self.ctx, {"id": "GO:0000002"})
         returnVal=list(map(lambda x: x["term"]["id"], ret[0]["results"]))
-        self.assertEqual(returnVal, ['GO:0006996', 'GO:0007005', 'GO:0008150','GO:0008150','GO:0009987', 'GO:0016043', 'GO:0071840'])
+        self.assertTrue(set(['GO:0006996', 'GO:0007005', 'GO:0008150','GO:0008150','GO:0009987', 'GO:0016043', 'GO:0071840']).issubset(set(returnVal)))
 
     def test_get_children(self):
         ret = self.serviceImpl.get_children(self.ctx, {"id": "GO:0000002"})
         returnVal=list(map(lambda x: x["term"]["id"], ret[0]["results"]))
-        self.assertEqual(returnVal, ['GO:0033955'])
+        self.assertTrue(set(['GO:0033955']).issubset(set(returnVal)))
 
     def test_get_parents(self):
         ret = self.serviceImpl.get_parents(self.ctx, {"id": "GO:0000002"})
         returnVal=list(map(lambda x: x["term"]["id"], ret[0]["results"]))
-        self.assertEqual(returnVal, ['GO:0007005'])
+        self.assertTrue(set(['GO:0007005']).issubset(set(returnVal)))
 
     def test_get_related(self):
         ret = self.serviceImpl.get_related(self.ctx, {"id": "GO:0000002"})
         returnVal=list(map(lambda x: x["term"]["id"], ret[0]["results"]))
-        self.assertEqual(returnVal, ['GO:0007005', 'GO:0032042', 'GO:0033955'])
+        self.assertTrue(set(['GO:0007005', 'GO:0032042', 'GO:0033955']).issubset(set(returnVal)))
 
     def test_get_siblings(self):
         ret = self.serviceImpl.get_siblings(self.ctx, {"id": "GO:0000002"})
         returnVal=list(map(lambda x: x, ret[0]["results"]))
-        self.assertEqual(returnVal, ["GO:0000266", "GO:0007006", "GO:0007287", "GO:0008053", "GO:0008637", "GO:0030382", "GO:0048311", "GO:0061726", "GO:0070584", "GO:0097250"])
+        self.assertTrue(set(["GO:0000266", "GO:0007006", "GO:0007287", "GO:0008053", "GO:0008637", "GO:0030382", "GO:0048311", "GO:0061726", "GO:0070584", "GO:0097250"]).issubset(set(returnVal)))
 
     def test_get_terms(self):
         ret = self.serviceImpl.get_terms(self.ctx, {"ids": ["GO:0000002", "GO:0000266"]})
         returnVal=list(map(lambda x: x["id"], ret[0]["results"]))
-        self.assertEqual(returnVal, ['GO:0000266', 'GO:0000002'])
+        self.assertTrue(set(['GO:0000002', 'GO:0000266']).issubset(set(returnVal)))
 
     def test_get_hierarchical_ancestors(self):
         ret = self.serviceImpl.get_hierarchical_ancestors(self.ctx, {"id": "GO:0000002"})
         returnVal=list(map(lambda x: x["term"]["id"], ret[0]["results"]))
-        self.assertEqual(returnVal, [ "GO:0006996", "GO:0007005", "GO:0008150", "GO:0008150", "GO:0009987", "GO:0016043", "GO:0071840"])
+        self.assertTrue(set([ "GO:0006996", "GO:0007005", "GO:0008150", "GO:0008150", "GO:0009987", "GO:0016043", "GO:0071840"]).issubset(set(returnVal)))
 
     def test_get_hierarchical_children(self):
         ret = self.serviceImpl.get_hierarchical_children(self.ctx, {"id": "GO:0000002"})
         returnVal=list(map(lambda x: x["term"]["id"], ret[0]["results"]))
-        self.assertEqual(returnVal, ['GO:0032042', 'GO:0033955'])
+        self.assertTrue(set(['GO:0032042', 'GO:0033955']).issubset(set(returnVal)))
 
     def test_get_hierarchical_descendants(self):
         ret = self.serviceImpl.get_hierarchical_descendants(self.ctx, {"id": "GO:0000002"})
         returnVal=list(map(lambda x: x["term"]["id"], ret[0]["results"]))
-        self.assertEqual(returnVal, ['GO:0032042', 'GO:0032043', 'GO:0033955', 'GO:0043504', 'GO:1901858', 'GO:1901859', 'GO:1901859', 'GO:1901860', 'GO:1901860', 'GO:1905951'])
+        self.assertTrue(set(['GO:0032042', 'GO:0032043', 'GO:0033955', 'GO:0043504', 'GO:1901858', 'GO:1901859', 'GO:1901859', 'GO:1901860', 'GO:1901860', 'GO:1905951']).issubset(set(returnVal)))
 
     def test_get_hierarchical_parents(self):
         ret = self.serviceImpl.get_hierarchical_parents(self.ctx, {"id": "GO:0000002"})
         returnVal=list(map(lambda x: x["term"]["id"], ret[0]["results"]))
-        self.assertEqual(returnVal, ['GO:0007005'])
+        self.assertTrue(set(['GO:0007005']).issubset(set(returnVal)))
+
+    def test_get_associated_ws_objects(self):
+        ret = self.serviceImpl.get_associated_ws_objects(self.ctx, {"id": "GO:0016209"})
+        returnVal=list(map(lambda x: x["ws_obj"]["workspace_id"], ret[0]["results"]))
+        self.assertTrue(set([44640]).issubset(set(returnVal)))
+
+    def test_get_terms_from_ws_feature(self):
+        ret = self.serviceImpl.get_terms_from_ws_feature(self.ctx, {"obj_ref": "44640/9/1", "feature_id": "b3908"})
+        returnVal=list(map(lambda x: x["terms"][0]["id"], ret[0]["results"]))
+        self.assertTrue(set(["GO:0016209"]).issubset(set(returnVal)))
+
+    def test_get_terms_from_ws_obj(self):
+        ret = self.serviceImpl.get_terms_from_ws_obj(self.ctx, {"obj_ref": "44640/9/1"})
+        returnVal=list(map(lambda x: x["terms"][0]["id"], ret[0]["results"]))
+        self.assertTrue(set(["GO:0016209"]).issubset(set(returnVal)))

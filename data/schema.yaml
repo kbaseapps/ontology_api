@@ -6,6 +6,23 @@ get_terms:
         ns: {type: string, enum: []}
         ts: {type: integer}
 
+get_terms_from_ws_feature:
+    type: object
+    required: [obj_ref, feature_id, ns, ts]
+    properties:
+        obj_ref: {type: string}
+        feature_id: {type: string}
+        ns: {type: string, enum: []}
+        ts: {type: integer}
+
+get_terms_from_ws_obj:
+    type: object
+    required: [obj_ref, ns, ts]
+    properties:
+        obj_ref: {type: string}
+        ns: {type: string, enum: []}
+        ts: {type: integer}
+
 default:
     type: object
     required: [id, ns, ts]

@@ -382,6 +382,18 @@ class Application(object):
                              name='OntologyAPI.get_hierarchical_parents',
                              types=[dict])
         self.method_authentication['OntologyAPI.get_hierarchical_parents'] = 'optional'  # noqa
+        self.rpc_service.add(impl_OntologyAPI.get_associated_ws_objects,
+                             name='OntologyAPI.get_associated_ws_objects',
+                             types=[dict])
+        self.method_authentication['OntologyAPI.get_associated_ws_objects'] = 'optional'  # noqa
+        self.rpc_service.add(impl_OntologyAPI.get_terms_from_ws_feature,
+                             name='OntologyAPI.get_terms_from_ws_feature',
+                             types=[dict])
+        self.method_authentication['OntologyAPI.get_terms_from_ws_feature'] = 'optional'  # noqa
+        self.rpc_service.add(impl_OntologyAPI.get_terms_from_ws_obj,
+                             name='OntologyAPI.get_terms_from_ws_obj',
+                             types=[dict])
+        self.method_authentication['OntologyAPI.get_terms_from_ws_obj'] = 'optional'  # noqa
         self.rpc_service.add(impl_OntologyAPI.status,
                              name='OntologyAPI.status',
                              types=[dict])
