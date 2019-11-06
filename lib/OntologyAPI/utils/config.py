@@ -8,8 +8,9 @@ import functools
 def get_config():
     config = {
         're_url': os.environ.get('KBASE_ENDPOINT', 'https://ci.kbase.us/services').strip('/') + '/relation_engine_api',
+        'default_ns': 'go_ontology',
         'ns': {
-            'go': 'GO'
+            'go_ontology': 'GO'
         }
     }
     return config
