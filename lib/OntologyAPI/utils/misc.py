@@ -15,7 +15,7 @@ def validate_params(params, schema='default'):
     try:
         _params=params.copy()
         _params['ts'] = _params.get('ts', int(time.time() * 1000)) 
-        _params['ns'] = _params.get('ns', 'go') 
+        _params['ns'] = _params.get('ns', _CONF['default_ns']) 
         _schema = _SCHEMAS[schema]
         _schema['properties']['ns']['enum']=list(_CONF['ns'].keys())
         jsonschema.validate(instance=_params, schema=_schema)
