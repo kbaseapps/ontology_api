@@ -1,0 +1,9 @@
+go_ontology: &id1
+  prefix: GO
+
+envo_ontology:
+  '@onto_terms': ENVO_terms
+  '@onto_edges': ENVO_edges
+  prefix: ontology
+
+default: *id1

@@ -69,7 +69,7 @@ database. This is optional and defaults to the current time.
 
 ### Namespace parameter
 
-Every method for this API can take a `ns` parameter, representing the ontology namespace to use. This is optional and defaults to `go`.
+Every method for this API can take a `ns` parameter, representing the ontology namespace to use. This is optional and defaults to `go_ontology`.
 
 ## Methods
 

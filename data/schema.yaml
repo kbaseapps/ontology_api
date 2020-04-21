@@ -5,6 +5,20 @@ get_terms:
         ids: {type: array, items: {type: string}, maxItems: 10000}
         ns: {type: string, enum: []}
         ts: {type: integer}
+        '@onto_terms': {type: string}
+        limit: {type: integer, maximum: 1000}
+        offset: {type: integer, maximum: 100000}
+
+get_metadata:
+    type: object
+    required: [id, ns, ts]
+    properties:
+        id: {type: string}
+        ns: {type: string, enum: []}
+        ts: {type: integer}
+        '@onto_terms': {type: string}
+        limit: {type: integer, maximum: 1000}
+        offset: {type: integer, maximum: 100000}
 
 get_terms_from_ws_feature:
     type: object
@@ -14,6 +28,8 @@ get_terms_from_ws_feature:
         feature_id: {type: string}
         ns: {type: string, enum: []}
         ts: {type: integer}
+        limit: {type: integer, maximum: 1000}
+        offset: {type: integer, maximum: 100000}
 
 get_terms_from_ws_obj:
     type: object
@@ -22,6 +38,8 @@ get_terms_from_ws_obj:
         obj_ref: {type: string}
         ns: {type: string, enum: []}
         ts: {type: integer}
+        limit: {type: integer, maximum: 1000}
+        offset: {type: integer, maximum: 100000}
 
 default:
     type: object
@@ -32,3 +50,5 @@ default:
         ts: {type: integer}
         limit: {type: integer, maximum: 1000}
         offset: {type: integer, maximum: 100000}
+        '@onto_terms': {type: string}
+        '@onto_edges': {type: string}

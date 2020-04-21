@@ -1,6 +1,6 @@
 # OntologyAPI release notes
 =========================================
 
-0.0.0
+0.3.0
 -----
-* Module created by kb-sdk init
+* Added support for generalized ontology queries

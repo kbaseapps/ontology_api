@@ -3,10 +3,11 @@ Relation engine API client.
 """
 import json
 import requests
-from OntologyAPI.utils.config import get_config
+from OntologyAPI.utils import config, namespace
 from OntologyAPI.exceptions import REError
 
-_CONF = get_config()
+_CONF = config.get_config()
+_NAMESPACE=namespace.load_namespaces()
 
 def query(name, params, token=None):
     """Run a stored query from the RE API."""
@@ -14,7 +15,7 @@ def query(name, params, token=None):
     ns=_params['ns']
     del _params['ns']
     url=_CONF['re_url'] + '/api/v1/query_results'
-    query=_CONF['ns'][ns] + '_' + name
+    query=_NAMESPACE[ns]['prefix'] + '_' + name
     resp = requests.post(
         url,
         params={'stored_query': query},
