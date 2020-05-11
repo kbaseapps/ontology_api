@@ -24,7 +24,7 @@ class OntologyAPI:
     # state. A method could easily clobber the state set by another while
     # the latter method is running.
     ######################################### noqa
-    VERSION = "0.3.2"
+    VERSION = "0.3.1"
     GIT_URL = "git@github.com:kbaseapps/ontology_api.git"
     GIT_COMMIT_HASH = "e20d25d81d81722a5dd97adaf87d5cc083f36756"
 
