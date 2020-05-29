@@ -1,5 +1,4 @@
 """Exception classes."""
-from pprint import pprint
 
 class Error(Exception):
     """Base class for exceptions in this module."""
