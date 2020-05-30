@@ -5,7 +5,6 @@ import json
 import requests
 from OntologyAPI.utils import config, namespace
 from OntologyAPI.exceptions import REError
-from pprint import pprint
 
 _CONF = config.get_config()
 _NAMESPACE=namespace.load_namespaces()
@@ -24,7 +23,8 @@ def query(name, params, token=None):
         headers={'Authorization': token}
     )
     if not resp.ok:
+        print("RE Error:", resp.text)
         #raise REError(resp)
-        return {'stats': {}, 'results': [], 'error': '<Response [400]>'}
+        return {'stats': {}, 'results': [], 'error': resp.text}
     return resp.json()
 

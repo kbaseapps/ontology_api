@@ -2,13 +2,13 @@ module-name:
     OntologyAPI
 
 module-description:
-    A KBase module
+    This is a service providing API for relation engine based ontology data queries.
 
 service-language:
     python
 
 module-version:
-    0.3.3
+    0.3.4
 
 owners:
     [luj]

@@ -1,4 +1,4 @@
-go_ontology: &id1
+go_ontology: &id1 # Configure go_ontology as the default namespace
   prefix: GO
 
 envo_ontology:

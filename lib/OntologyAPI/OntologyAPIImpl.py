@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
 #BEGIN_HEADER
 import logging
-import os
 import re
 
 from OntologyAPI.utils import re_api, misc
-from pprint import pprint
 #END_HEADER
 
 
@@ -24,14 +22,11 @@ class OntologyAPI:
     # state. A method could easily clobber the state set by another while
     # the latter method is running.
     ######################################### noqa
-    VERSION = "0.3.3"
+    VERSION = "0.3.4"
     GIT_URL = "git@github.com:kbaseapps/ontology_api.git"
     GIT_COMMIT_HASH = "e20d25d81d81722a5dd97adaf87d5cc083f36756"
 
     #BEGIN_CLASS_HEADER
-    def validate_params(self, params, schema='default'):
-        _params = misc.validate_params(params, schema);
-        return _params
     #END_CLASS_HEADER
 
     # config contains contents of config file in a hash or None if it couldn't
@@ -69,7 +64,7 @@ class OntologyAPI:
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN get_descendants
-        validated_params=self.validate_params(GenericParams);
+        validated_params=misc.validate_params(GenericParams)
         results = re_api.query("get_descendants", validated_params)
 
         returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
@@ -106,7 +101,7 @@ class OntologyAPI:
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN get_ancestors
-        validated_params=self.validate_params(GenericParams);
+        validated_params=misc.validate_params(GenericParams)
         results = re_api.query("get_ancestors", validated_params)
 
         returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
@@ -143,7 +138,7 @@ class OntologyAPI:
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN get_children
-        validated_params=self.validate_params(GenericParams);
+        validated_params=misc.validate_params(GenericParams)
         results = re_api.query("get_children", validated_params)
 
         returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
@@ -180,7 +175,7 @@ class OntologyAPI:
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN get_parents
-        validated_params=self.validate_params(GenericParams);
+        validated_params=misc.validate_params(GenericParams)
         results = re_api.query("get_parents", validated_params)
 
         returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
@@ -217,7 +212,7 @@ class OntologyAPI:
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN get_related
-        validated_params=self.validate_params(GenericParams);
+        validated_params=misc.validate_params(GenericParams)
         results = re_api.query("get_related", validated_params)
 
         returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
@@ -254,7 +249,7 @@ class OntologyAPI:
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN get_siblings
-        validated_params=self.validate_params(GenericParams);
+        validated_params=misc.validate_params(GenericParams)
         results = re_api.query("get_siblings", validated_params)
 
         returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
@@ -289,7 +284,7 @@ class OntologyAPI:
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN get_terms
-        validated_params=self.validate_params(GetTermsParams, "get_terms");
+        validated_params=misc.validate_params(GetTermsParams, "get_terms")
         results = re_api.query("get_terms", validated_params)
 
         returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
@@ -326,7 +321,7 @@ class OntologyAPI:
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN get_hierarchical_ancestors
-        validated_params=self.validate_params(GenericParams);
+        validated_params=misc.validate_params(GenericParams)
         results = re_api.query("get_hierarchicalAncestors", validated_params)
 
         returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
@@ -363,7 +358,7 @@ class OntologyAPI:
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN get_hierarchical_children
-        validated_params=self.validate_params(GenericParams);
+        validated_params=misc.validate_params(GenericParams)
         results = re_api.query("get_hierarchicalChildren", validated_params)
 
         returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
@@ -400,7 +395,7 @@ class OntologyAPI:
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN get_hierarchical_descendants
-        validated_params=self.validate_params(GenericParams);
+        validated_params=misc.validate_params(GenericParams)
         results = re_api.query("get_hierarchicalDescendants", validated_params)
 
         returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
@@ -437,7 +432,7 @@ class OntologyAPI:
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN get_hierarchical_parents
-        validated_params=self.validate_params(GenericParams);
+        validated_params=misc.validate_params(GenericParams)
         results = re_api.query("get_hierarchicalParents", validated_params)
 
         returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
@@ -482,7 +477,7 @@ class OntologyAPI:
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN get_associated_ws_objects
-        validated_params=self.validate_params(GenericParams);
+        validated_params=misc.validate_params(GenericParams)
         results = re_api.query("get_associated_ws_objects", validated_params)
 
         returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
@@ -531,9 +526,9 @@ class OntologyAPI:
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN get_terms_from_ws_feature
-        validated_params=self.validate_params(GetTermsFromWSFeatureParams, "get_terms_from_ws_feature");
+        validated_params=misc.validate_params(GetTermsFromWSFeatureParams, "get_terms_from_ws_feature")
         validated_params['obj_ref']=re.sub('/', ':', validated_params['obj_ref'])
-        validated_params['feature_id']=validated_params['obj_ref'] + '_' + validated_params['feature_id'];
+        validated_params['feature_id']=validated_params['obj_ref'] + '_' + validated_params['feature_id']
         del validated_params['obj_ref']
 
         results = re_api.query("get_terms_from_ws_feature", validated_params)
@@ -582,7 +577,7 @@ class OntologyAPI:
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN get_terms_from_ws_obj
-        validated_params=self.validate_params(GetTermsFromWSObjParams, "get_terms_from_ws_obj");
+        validated_params=misc.validate_params(GetTermsFromWSObjParams, "get_terms_from_ws_obj")
         validated_params['obj_ref']=re.sub('/', ':', validated_params['obj_ref'])
         results = re_api.query("get_terms_from_ws_obj", validated_params)
 
