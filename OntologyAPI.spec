@@ -145,16 +145,25 @@ module OntologyAPI {
         string ns;
     } GenericResults;
 
+    /* 
+      total_count - total count of features associated.
+      results - array of WSObjWithWSFeatures objects.
+    */
+    typedef structure {
+      int total_count;
+      list<WSObjWithWSFeatures> results;
+    } WSObjectsResults;
+
     /*
       Results from get_associated_ws_objects
       stats - Query execution information from ArangoDB.
-      results - array of WSObjWithWSFeatures objects.
+      results - array of WSObjectsResults objects.
       ts - Timestamp used in the request
       ns - Ontology namespace used in the request.
     */
     typedef structure {
         UnspecifiedObject stats;
-        list<WSObjWithWSFeatures> results;
+        list<WSObjectsResults> results;
         int ts;
         string ns;
     } GetAssociatedWSObjectsResults;

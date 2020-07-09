@@ -252,29 +252,37 @@ items:
       type: array
       items:
         type: object
-        properties:
-          ws_obj:
-            type: object
-            description: workspace object
-            properties:
-              workspace_id: 
-                type: integer
-              object_id:
-                type: integer
-              version:
-                type: integer
-              name:
-                type: string
-          features:
+        properties: 
+          total_count:
+            type: integer
+            description: total features associated
+          results:
             type: array
             items:
               type: object
-              description: workspace feature 
               properties:
-                feature_id:
-                  type: string
-                updated_at:
-                  type: integer
+                ws_obj:
+                  type: object
+                  description: workspace object
+                  properties:
+                    workspace_id: 
+                      type: integer
+                    object_id:
+                      type: integer
+                    version:
+                      type: integer
+                    name:
+                      type: string
+                features:
+                  type: array
+                  items:
+                    type: object
+                    description: workspace feature 
+                    properties:
+                      feature_id:
+                        type: string
+                      updated_at:
+                        type: integer
 ```
 
 ### get_terms_from_ws_feature

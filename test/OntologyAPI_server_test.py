@@ -122,7 +122,8 @@ class OntologyAPITest(unittest.TestCase):
 
     def test_go_get_associated_ws_objects(self):
         ret = self.serviceImpl.get_associated_ws_objects(self.ctx, {"id": "GO:0016209"})
-        returnVal=list(map(lambda x: x["ws_obj"]["workspace_id"], ret[0]["results"]))
+        returnVal=list(map(lambda x: x["ws_obj"]["workspace_id"], ret[0]["results"][0]["results"]))
+        self.assertTrue(ret[0]["results"][0]["total_count"] == 449)
         self.assertTrue(set([4258]).issubset(set(returnVal)))
 
     def test_go_get_terms_from_ws_feature(self):
