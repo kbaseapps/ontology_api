@@ -1,4 +1,4 @@
-go_ontology: &id1 # Configure go_ontology as the default namespace
+go_ontology: 
   prefix: GO
 
 envo_ontology:
@@ -6,4 +6,4 @@ envo_ontology:
   '@onto_edges': ENVO_edges
   prefix: ontology
 
-default: *id1
+default: go_ontology
