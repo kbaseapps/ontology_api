@@ -15,7 +15,7 @@ def validate_params(params, schema='default'):
     try:
         _params=params.copy()
         _params['ts'] = _params.get('ts', int(time.time() * 1000)) 
-        _params['ns'] = _params.get('ns', 'default') 
+        _params['ns'] = _params.get('ns', _NAMESPACE['default']) 
         _ns = _NAMESPACE[_params['ns']]
         _schema = _SCHEMAS[schema]
         for x in ['@onto_terms', '@onto_edges']:
