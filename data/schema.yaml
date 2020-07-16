@@ -20,6 +20,17 @@ get_metadata:
         limit: {type: integer, maximum: 1000}
         offset: {type: integer, maximum: 100000}
 
+get_associated_ws_features:
+    type: object
+    required: [id, ns, ts]
+    properties:
+        id: {type: string}
+        obj_ref: {type: string}
+        ns: {type: string, enum: []}
+        ts: {type: integer}
+        limit: {type: integer, maximum: 1000}
+        offset: {type: integer, maximum: 100000}
+
 get_terms_from_ws_feature:
     type: object
     required: [obj_ref, feature_id, ns, ts]

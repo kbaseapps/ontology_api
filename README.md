@@ -23,7 +23,7 @@ properties:
     maximum: 1000
   offset:
     type: integer
-  maximum: 100000
+    maximum: 100000
 ```
 
 ### Result
@@ -155,6 +155,12 @@ properties:
     type: integer
   ns:
     type: string
+  limit:
+    type: integer
+    maximum: 1000
+  offset:
+    type: integer
+    maximum: 100000
 ```
 
 It has following reult schema:
@@ -253,36 +259,95 @@ items:
       items:
         type: object
         properties: 
-          total_count:
-            type: integer
-            description: total features associated
-          results:
-            type: array
-            items:
+            ws_obj:
               type: object
+              description: workspace object
               properties:
-                ws_obj:
-                  type: object
-                  description: workspace object
-                  properties:
-                    workspace_id: 
-                      type: integer
-                    object_id:
-                      type: integer
-                    version:
-                      type: integer
-                    name:
-                      type: string
-                features:
-                  type: array
-                  items:
-                    type: object
-                    description: workspace feature 
-                    properties:
-                      feature_id:
-                        type: string
-                      updated_at:
-                        type: integer
+                workspace_id: 
+                  type: integer
+                object_id:
+                  type: integer
+                version:
+                  type: integer
+                name:
+                  type: string
+            feature_count:
+              type: integer
+```
+
+### get_associated_ws_features
+
+Retrieve associated workspace genome features of an ontology term by ID and workspace obj_ref
+
+Example:
+ret = OntologyAPI.get_associated_ws_features(self.ctx, {"id": "GO:0016209", "obj_ref": "4258/36981/3"})
+
+It has following params schema:
+```yaml
+type: object
+required: ['id']
+properties:
+  id:
+    type: string
+  obj_ref:
+    type: string
+    description: workspace object ref
+  ts:
+    type: integer
+  ns:
+    type: string
+  limit:
+    type: integer
+    maximum: 1000
+  offset:
+    type: integer
+    maximum: 100000
+```
+
+It has following reult schema:
+```yaml
+type: array
+minItems: 1
+maxItems: 1
+items:
+  type: object
+  properties:
+    ts:
+      type: integer
+      title: Timestamp used in the request, default is current time
+    ns:
+      type: string
+      title: Ontology namespace used in the request
+    stats:
+      type: object
+      description: RE query execution meta-info
+    results:
+      type: array
+      items:
+        type: object
+          properties:
+            ws_obj:
+              type: object
+              description: workspace object
+              properties:
+                workspace_id: 
+                  type: integer
+                object_id:
+                  type: integer
+                version:
+                  type: integer
+                name:
+                  type: string
+            features:
+              type: array
+              items:
+                type: object
+                description: workspace feature 
+                properties:
+                  feature_id:
+                    type: string
+                  updated_at:
+                    type: integer
 ```
 
 ### get_terms_from_ws_feature
@@ -290,7 +355,7 @@ items:
 Retrieve ontology terms of an workspace genome feature by genome obj_ref and feature id
 
 Example:
-ret = OntologyAPI.get_terms_from_ws_feature(self.ctx, {"obj_ref": "44640/9/1", "feature_id": "b3908"})
+ret = OntologyAPI.get_terms_from_ws_feature(self.ctx, {"obj_ref": "4258/36981/3", "feature_id": "Thecc1EG022426"})
 
 It has following params schema:
 ```yaml
@@ -307,6 +372,12 @@ properties:
     type: integer
   ns:
     type: string
+  limit:
+    type: integer
+    maximum: 1000
+  offset:
+    type: integer
+    maximum: 100000
 ```
 
 It has following reult schema:
@@ -386,7 +457,7 @@ items:
 Retrieve ontology terms of an workspace object by workspace obj_ref
 
 Example:
-ret = OntologyAPI.get_terms_from_ws_obj(self.ctx, {"obj_ref": "44640/9/1"})
+ret = OntologyAPI.get_terms_from_ws_obj(self.ctx, {"obj_ref": "4258/36981/3"})
 
 It has following params schema:
 ```yaml
@@ -400,6 +471,12 @@ properties:
     type: integer
   ns:
     type: string
+  limit:
+    type: integer
+    maximum: 1000
+  offset:
+    type: integer
+    maximum: 100000
 ```
 See the **get_terms_from_ws_feature** section for result schema.
 
