@@ -22,9 +22,9 @@ class OntologyAPI:
     # state. A method could easily clobber the state set by another while
     # the latter method is running.
     ######################################### noqa
-    VERSION = "0.3.5"
-    GIT_URL = "git@github.com:kbaseapps/ontology_api.git"
-    GIT_COMMIT_HASH = "e20d25d81d81722a5dd97adaf87d5cc083f36756"
+    VERSION = "0.3.6"
+    GIT_URL = "git@github.com:zhlu9890/ontology_api.git"
+    GIT_COMMIT_HASH = "2e5a72260abfd9725b5a4ed52b3186a136e4c519"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -269,10 +269,12 @@ class OntologyAPI:
            for get_terms ids - required - a list of name ontology term id,
            such as '["GO:0000002", "GO:0000266"]' ts - optional - fetch
            documents with this active timestamp, defaults to now ns -
-           optional - ontology namespace to use, defaults to "go") ->
+           optional - ontology namespace to use, defaults to "go" limit -
+           optional - number of results to return (defaults to 20) offset -
+           optional - number of results to skip (defaults to 0)) ->
            structure: parameter "ids" of list of type "ID" (Ontology term id,
            such as "GO:0000002"), parameter "ts" of Long, parameter "ns" of
-           String
+           String, parameter "limit" of Long, parameter "offset" of Long
         :returns: instance of type "GenericResults" (Generic results stats -
            Query execution information from ArangoDB. results - array of
            objects of results. ts - Timestamp used in the request ns -
@@ -460,18 +462,16 @@ class OntologyAPI:
            "offset" of Long
         :returns: instance of type "GetAssociatedWSObjectsResults" (Results
            from get_associated_ws_objects stats - Query execution information
-           from ArangoDB. results - array of WSObjWithWSFeatures objects. ts
-           - Timestamp used in the request ns - Ontology namespace used in
-           the request.) -> structure: parameter "stats" of unspecified
-           object, parameter "results" of list of type "WSObjWithWSFeatures"
-           (Workspace obj with associated workspace genome features ws_obj -
-           WSObj object features - a list of FeatureLite object) ->
-           structure: parameter "ws_obj" of type "WSObj" (workspace object)
-           -> structure: parameter "workspace_id" of Long, parameter
-           "object_id" of Long, parameter "version" of Long, parameter "name"
-           of String, parameter "features" of list of type "FeatureLite"
-           (workspace genome feature, lite version) -> structure: parameter
-           "feature_id" of String, parameter "updated_at" of Long, parameter
+           from ArangoDB. results - array of WSObjectsResults objects. ts -
+           Timestamp used in the request ns - Ontology namespace used in the
+           request.) -> structure: parameter "stats" of unspecified object,
+           parameter "results" of list of type "WSObjectsWithFeatureCount"
+           (Workspace obj with count of associated workspace genome features
+           feature_count - count of features associated. ws_obj - WSObj
+           object) -> structure: parameter "feature_count" of Long, parameter
+           "ws_obj" of type "WSObj" (workspace object) -> structure:
+           parameter "workspace_id" of Long, parameter "object_id" of Long,
+           parameter "version" of Long, parameter "name" of String, parameter
            "ts" of Long, parameter "ns" of String
         """
         # ctx is the context object
@@ -490,18 +490,69 @@ class OntologyAPI:
         # return the results
         return [returnVal]
 
+    def get_associated_ws_features(self, ctx, GetAssociatedWSFeaturesParams):
+        """
+        Retrieve associated workspace genome features of an ontology term by ID and workspace obj_ref
+        :param GetAssociatedWSFeaturesParams: instance of type
+           "GetAssociatedWSFeaturesParams" (Parameters for
+           get_terms_from_ws_obj id - required - ontology term id, such as
+           "GO:0016209" obj_ref - optional - workspace object ref, such as
+           "6976/926/2" ts - optional - fetch documents with this active
+           timestamp, defaults to now ns - optional - ontology namespace to
+           use, defaults to "go" limit - optional - number of results to
+           return (defaults to 20) offset - optional - number of results to
+           skip (defaults to 0)) -> structure: parameter "id" of type "ID"
+           (Ontology term id, such as "GO:0000002"), parameter "obj_ref" of
+           String, parameter "ns" of String, parameter "ts" of Long,
+           parameter "limit" of Long, parameter "offset" of Long
+        :returns: instance of type "GetAssociatedWSFeaturesResults" (Results
+           from get_associated_ws_objects stats - Query execution information
+           from ArangoDB. results - array of WSObjectsResults objects. ts -
+           Timestamp used in the request ns - Ontology namespace used in the
+           request.) -> structure: parameter "stats" of unspecified object,
+           parameter "results" of list of type "WSObjWithWSFeatures"
+           (Workspace obj with associated workspace genome features ws_obj -
+           WSObj object features - a list of FeatureLite object) ->
+           structure: parameter "ws_obj" of type "WSObj" (workspace object)
+           -> structure: parameter "workspace_id" of Long, parameter
+           "object_id" of Long, parameter "version" of Long, parameter "name"
+           of String, parameter "features" of list of type "FeatureLite"
+           (workspace genome feature, lite version) -> structure: parameter
+           "feature_id" of String, parameter "updated_at" of Long, parameter
+           "ts" of Long, parameter "ns" of String
+        """
+        # ctx is the context object
+        # return variables are: returnVal
+        #BEGIN get_associated_ws_features
+        validated_params=misc.validate_params(GetAssociatedWSFeaturesParams, "get_associated_ws_features")
+        validated_params['obj_ref']=re.sub('/', ':', validated_params['obj_ref'])
+        results = re_api.query("get_associated_ws_features", validated_params)
+
+        returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
+        #END get_associated_ws_features
+
+        # At some point might do deeper type checking...
+        if not isinstance(returnVal, dict):
+            raise ValueError('Method get_associated_ws_features return value ' +
+                             'returnVal is not type dict as required.')
+        # return the results
+        return [returnVal]
+
     def get_terms_from_ws_feature(self, ctx, GetTermsFromWSFeatureParams):
         """
-        Retrieve ontology terms of an workspace genome feature by genome obj_ref and feature id
+        Retrieve ontology terms of an workspace genome feature by workspace obj_ref and feature id
         :param GetTermsFromWSFeatureParams: instance of type
            "GetTermsFromWSFeatureParams" (Parameters for
            get_terms_from_ws_feature obj_ref - required - workspace object
-           ref, such as "44640/9/1" feature_id - required - workspace feature
-           id, such as "b3908" ts - optional - fetch documents with this
-           active timestamp, defaults to now ns - optional - ontology
-           namespace to use, defaults to "go") -> structure: parameter
-           "obj_ref" of String, parameter "feature_id" of String, parameter
-           "ns" of String, parameter "ts" of Long
+           ref, such as "6976/926/2" feature_id - required - workspace
+           feature id, such as "b3908" ts - optional - fetch documents with
+           this active timestamp, defaults to now ns - optional - ontology
+           namespace to use, defaults to "go" limit - optional - number of
+           results to return (defaults to 20) offset - optional - number of
+           results to skip (defaults to 0)) -> structure: parameter "obj_ref"
+           of String, parameter "feature_id" of String, parameter "ns" of
+           String, parameter "ts" of Long, parameter "limit" of Long,
+           parameter "offset" of Long
         :returns: instance of type "GetTermsFromWSFeatureResults" (Results
            from get_terms_from_ws_feature stats - Query execution information
            from ArangoDB. results - array of TermsWithWSFeature objects. ts -
@@ -548,11 +599,14 @@ class OntologyAPI:
         Retrieve ontology terms of an workspace object by workspace obj_ref
         :param GetTermsFromWSObjParams: instance of type
            "GetTermsFromWSObjParams" (Parameters for get_terms_from_ws_obj
-           obj_ref - required - workspace object ref, such as "44640/9/1" ts
+           obj_ref - required - workspace object ref, such as "6976/926/2" ts
            - optional - fetch documents with this active timestamp, defaults
-           to now ns - optional - ontology namespace to use, defaults to
-           "go") -> structure: parameter "obj_ref" of String, parameter "ns"
-           of String, parameter "ts" of Long
+           to now ns - optional - ontology namespace to use, defaults to "go"
+           limit - optional - number of results to return (defaults to 20)
+           offset - optional - number of results to skip (defaults to 0)) ->
+           structure: parameter "obj_ref" of String, parameter "ns" of
+           String, parameter "ts" of Long, parameter "limit" of Long,
+           parameter "offset" of Long
         :returns: instance of type "GetTermsFromWSObjResults" (Results from
            get_terms_from_ws_obj stats - Query execution information from
            ArangoDB. results - array of TermsWithWSFeature objects. ts -

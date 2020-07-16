@@ -77,42 +77,82 @@ module OntologyAPI {
       list<FeatureLite> features;
     } WSObjWithWSFeatures;
 
+    /* 
+      Workspace obj with count of associated workspace genome features
+      feature_count - count of features associated.
+      ws_obj - WSObj object
+    */
+    typedef structure {
+      int feature_count;
+      WSObj ws_obj;
+    } WSObjectsWithFeatureCount;
+
     /*
       Parameters for get_terms
       ids - required - a list of name ontology term id, such as '["GO:0000002", "GO:0000266"]'
       ts - optional - fetch documents with this active timestamp, defaults to now
       ns - optional - ontology namespace to use, defaults to "go"
+      limit - optional - number of results to return (defaults to 20)
+      offset - optional - number of results to skip (defaults to 0)
     */
     typedef structure {
         list<ID>  ids;
         int ts;
         string  ns;
+        int  limit;
+        int  offset;
     } GetTermsParams;
     
     /*
       Parameters for get_terms_from_ws_obj
-      obj_ref - required - workspace object ref, such as "44640/9/1"
+      id - required - ontology term id, such as "GO:0016209"
+      obj_ref - optional - workspace object ref, such as "6976/926/2"
       ts - optional - fetch documents with this active timestamp, defaults to now
       ns - optional - ontology namespace to use, defaults to "go"
+      limit - optional - number of results to return (defaults to 20)
+      offset - optional - number of results to skip (defaults to 0)
     */
     typedef structure {
-      string  obj_ref;
-      string  ns;
-      int ts;
+        ID  id;
+        string  obj_ref;
+        string  ns;
+        int ts;
+        int  limit;
+        int  offset;
+    } GetAssociatedWSFeaturesParams;
+
+    /*
+      Parameters for get_terms_from_ws_obj
+      obj_ref - required - workspace object ref, such as "6976/926/2"
+      ts - optional - fetch documents with this active timestamp, defaults to now
+      ns - optional - ontology namespace to use, defaults to "go"
+      limit - optional - number of results to return (defaults to 20)
+      offset - optional - number of results to skip (defaults to 0)
+    */
+    typedef structure {
+        string  obj_ref;
+        string  ns;
+        int ts;
+        int  limit;
+        int  offset;
     } GetTermsFromWSObjParams;
 
     /*
       Parameters for get_terms_from_ws_feature
-      obj_ref - required - workspace object ref, such as "44640/9/1"
+      obj_ref - required - workspace object ref, such as "6976/926/2"
       feature_id - required - workspace feature id, such as "b3908"
       ts - optional - fetch documents with this active timestamp, defaults to now
       ns - optional - ontology namespace to use, defaults to "go"
+      limit - optional - number of results to return (defaults to 20)
+      offset - optional - number of results to skip (defaults to 0)
     */
     typedef structure {
-      string  obj_ref;
-      string  feature_id;
-      string  ns;
-      int ts;
+        string  obj_ref;
+        string  feature_id;
+        string  ns;
+        int ts;
+        int  limit;
+        int  offset;
     } GetTermsFromWSFeatureParams;
 
     /*
@@ -145,14 +185,19 @@ module OntologyAPI {
         string ns;
     } GenericResults;
 
-    /* 
-      total_count - total count of features associated.
-      results - array of WSObjWithWSFeatures objects.
+    /*
+      Results from get_associated_ws_objects
+      stats - Query execution information from ArangoDB.
+      results - array of WSObjectsResults objects.
+      ts - Timestamp used in the request
+      ns - Ontology namespace used in the request.
     */
     typedef structure {
-      int total_count;
-      list<WSObjWithWSFeatures> results;
-    } WSObjectsResults;
+        UnspecifiedObject stats;
+        list<WSObjectsWithFeatureCount> results;
+        int ts;
+        string ns;
+    } GetAssociatedWSObjectsResults;
 
     /*
       Results from get_associated_ws_objects
@@ -163,10 +208,10 @@ module OntologyAPI {
     */
     typedef structure {
         UnspecifiedObject stats;
-        list<WSObjectsResults> results;
+        list<WSObjWithWSFeatures> results;
         int ts;
         string ns;
-    } GetAssociatedWSObjectsResults;
+    } GetAssociatedWSFeaturesResults;
 
     /*
       Results from get_terms_from_ws_feature
@@ -232,7 +277,10 @@ module OntologyAPI {
     /* Retrieve associated workspace objects of an ontology term by ID*/
     funcdef get_associated_ws_objects(GenericParams) returns (GetAssociatedWSObjectsResults) authentication optional;
 
-    /* Retrieve ontology terms of an workspace genome feature by genome obj_ref and feature id*/
+    /* Retrieve associated workspace genome features of an ontology term by ID and workspace obj_ref*/
+    funcdef get_associated_ws_features(GetAssociatedWSFeaturesParams) returns (GetAssociatedWSFeaturesResults) authentication optional;
+
+    /* Retrieve ontology terms of an workspace genome feature by workspace obj_ref and feature id*/
     funcdef get_terms_from_ws_feature(GetTermsFromWSFeatureParams) returns (GetTermsFromWSFeatureResults) authentication optional;
 
     /* Retrieve ontology terms of an workspace object by workspace obj_ref*/
