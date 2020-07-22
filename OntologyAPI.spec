@@ -191,26 +191,30 @@ module OntologyAPI {
       results - array of WSObjectsResults objects.
       ts - Timestamp used in the request
       ns - Ontology namespace used in the request.
+      total_count - total count of associated workspace objects
     */
     typedef structure {
         UnspecifiedObject stats;
         list<WSObjectsWithFeatureCount> results;
         int ts;
         string ns;
+        int total_count;
     } GetAssociatedWSObjectsResults;
 
     /*
-      Results from get_associated_ws_objects
+      Results from get_associated_ws_features
       stats - Query execution information from ArangoDB.
       results - array of WSObjectsResults objects.
       ts - Timestamp used in the request
       ns - Ontology namespace used in the request.
+      total_count - total count of associated workspace features
     */
     typedef structure {
         UnspecifiedObject stats;
         list<WSObjWithWSFeatures> results;
         int ts;
         string ns;
+        int total_count;
     } GetAssociatedWSFeaturesResults;
 
     /*
