@@ -22,7 +22,7 @@ class OntologyAPI:
     # state. A method could easily clobber the state set by another while
     # the latter method is running.
     ######################################### noqa
-    VERSION = "0.3.6"
+    VERSION = "0.3.7"
     GIT_URL = "git@github.com:zhlu9890/ontology_api.git"
     GIT_COMMIT_HASH = "2e5a72260abfd9725b5a4ed52b3186a136e4c519"
 
@@ -480,7 +480,7 @@ class OntologyAPI:
         validated_params=misc.validate_params(GenericParams)
         results = re_api.query("get_associated_ws_objects", validated_params)
 
-        returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
+        returnVal={"stats": results["stats"], "results": results["results"][0]["results"], "ts": validated_params["ts"], "ns": validated_params["ns"], "total_count": results["results"][0]["total_count"]}
         #END get_associated_ws_objects
 
         # At some point might do deeper type checking...
@@ -528,7 +528,7 @@ class OntologyAPI:
         validated_params['obj_ref']=re.sub('/', ':', validated_params['obj_ref'])
         results = re_api.query("get_associated_ws_features", validated_params)
 
-        returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
+        returnVal={"stats": results["stats"], "results": results["results"][0]["results"], "ts": validated_params["ts"], "ns": validated_params["ns"], "total_count": results["results"][0]["total_count"]}
         #END get_associated_ws_features
 
         # At some point might do deeper type checking...

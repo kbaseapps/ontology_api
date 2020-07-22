@@ -123,11 +123,13 @@ class OntologyAPITest(unittest.TestCase):
     def test_go_get_associated_ws_objects(self):
         ret = self.serviceImpl.get_associated_ws_objects(self.ctx, {"id": "GO:0016209"})
         returnVal=list(map(lambda x: (x["ws_obj"]["workspace_id"], x["feature_count"]), ret[0]["results"]))
+        self.assertTrue(ret[0]["total_count"] == 42)
         self.assertTrue((4258, 17) in returnVal)
 
     def test_go_get_associated_ws_features(self):
         ret = self.serviceImpl.get_associated_ws_features(self.ctx, {"id": "GO:0016209", "obj_ref": "4258/36981/3"})
         returnVal=list(map(lambda x: x["feature_id"], ret[0]["results"][0]["features"]))
+        self.assertTrue(ret[0]["total_count"] == 7)
         self.assertTrue(set(["Thecc1EG022426"]).issubset(set(returnVal)))
         self.assertTrue(ret[0]["results"][0]["ws_obj"]["workspace_id"] == 4258)
 

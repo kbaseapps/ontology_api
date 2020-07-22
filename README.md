@@ -251,6 +251,9 @@ items:
     ns:
       type: string
       title: Ontology namespace used in the request
+    total_count:
+      type: integer
+      title: total count of associated workspace objects
     stats:
       type: object
       description: RE query execution meta-info
@@ -318,6 +321,9 @@ items:
     ns:
       type: string
       title: Ontology namespace used in the request
+    total_count:
+      type: integer
+      title: total count of associated workspace features
     stats:
       type: object
       description: RE query execution meta-info
