@@ -22,7 +22,7 @@ class OntologyAPI:
     # state. A method could easily clobber the state set by another while
     # the latter method is running.
     ######################################### noqa
-    VERSION = "0.3.7"
+    VERSION = "0.3.8"
     GIT_URL = "git@github.com:zhlu9890/ontology_api.git"
     GIT_COMMIT_HASH = "2e5a72260abfd9725b5a4ed52b3186a136e4c519"
 
@@ -67,7 +67,12 @@ class OntologyAPI:
         validated_params=misc.validate_params(GenericParams)
         results = re_api.query("get_descendants", validated_params)
 
-        returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
+        returnVal={"stats": results["stats"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
+        if results.get('error'):
+            returnVal["results"]=[]
+            returnVal["error"]=results.get('error')
+        else:
+            returnVal["results"]=results["results"]
         #END get_descendants
 
         # At some point might do deeper type checking...
@@ -104,7 +109,12 @@ class OntologyAPI:
         validated_params=misc.validate_params(GenericParams)
         results = re_api.query("get_ancestors", validated_params)
 
-        returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
+        returnVal={"stats": results["stats"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
+        if results.get('error'):
+            returnVal["results"]=[]
+            returnVal["error"]=results.get('error')
+        else:
+            returnVal["results"]=results["results"]
         #END get_ancestors
 
         # At some point might do deeper type checking...
@@ -141,7 +151,12 @@ class OntologyAPI:
         validated_params=misc.validate_params(GenericParams)
         results = re_api.query("get_children", validated_params)
 
-        returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
+        returnVal={"stats": results["stats"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
+        if results.get('error'):
+            returnVal["results"]=[]
+            returnVal["error"]=results.get('error')
+        else:
+            returnVal["results"]=results["results"]
         #END get_children
 
         # At some point might do deeper type checking...
@@ -178,7 +193,12 @@ class OntologyAPI:
         validated_params=misc.validate_params(GenericParams)
         results = re_api.query("get_parents", validated_params)
 
-        returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
+        returnVal={"stats": results["stats"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
+        if results.get('error'):
+            returnVal["results"]=[]
+            returnVal["error"]=results.get('error')
+        else:
+            returnVal["results"]=results["results"]
         #END get_parents
 
         # At some point might do deeper type checking...
@@ -215,7 +235,12 @@ class OntologyAPI:
         validated_params=misc.validate_params(GenericParams)
         results = re_api.query("get_related", validated_params)
 
-        returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
+        returnVal={"stats": results["stats"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
+        if results.get('error'):
+            returnVal["results"]=[]
+            returnVal["error"]=results.get('error')
+        else:
+            returnVal["results"]=results["results"]
         #END get_related
 
         # At some point might do deeper type checking...
@@ -252,7 +277,12 @@ class OntologyAPI:
         validated_params=misc.validate_params(GenericParams)
         results = re_api.query("get_siblings", validated_params)
 
-        returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
+        returnVal={"stats": results["stats"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
+        if results.get('error'):
+            returnVal["results"]=[]
+            returnVal["error"]=results.get('error')
+        else:
+            returnVal["results"]=results["results"]
         #END get_siblings
 
         # At some point might do deeper type checking...
@@ -289,7 +319,12 @@ class OntologyAPI:
         validated_params=misc.validate_params(GetTermsParams, "get_terms")
         results = re_api.query("get_terms", validated_params)
 
-        returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
+        returnVal={"stats": results["stats"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
+        if results.get('error'):
+            returnVal["results"]=[]
+            returnVal["error"]=results.get('error')
+        else:
+            returnVal["results"]=results["results"]
         #END get_terms
 
         # At some point might do deeper type checking...
@@ -326,7 +361,12 @@ class OntologyAPI:
         validated_params=misc.validate_params(GenericParams)
         results = re_api.query("get_hierarchicalAncestors", validated_params)
 
-        returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
+        returnVal={"stats": results["stats"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
+        if results.get('error'):
+            returnVal["results"]=[]
+            returnVal["error"]=results.get('error')
+        else:
+            returnVal["results"]=results["results"]
         #END get_hierarchical_ancestors
 
         # At some point might do deeper type checking...
@@ -363,7 +403,12 @@ class OntologyAPI:
         validated_params=misc.validate_params(GenericParams)
         results = re_api.query("get_hierarchicalChildren", validated_params)
 
-        returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
+        returnVal={"stats": results["stats"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
+        if results.get('error'):
+            returnVal["results"]=[]
+            returnVal["error"]=results.get('error')
+        else:
+            returnVal["results"]=results["results"]
         #END get_hierarchical_children
 
         # At some point might do deeper type checking...
@@ -400,7 +445,12 @@ class OntologyAPI:
         validated_params=misc.validate_params(GenericParams)
         results = re_api.query("get_hierarchicalDescendants", validated_params)
 
-        returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
+        returnVal={"stats": results["stats"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
+        if results.get('error'):
+            returnVal["results"]=[]
+            returnVal["error"]=results.get('error')
+        else:
+            returnVal["results"]=results["results"]
         #END get_hierarchical_descendants
 
         # At some point might do deeper type checking...
@@ -437,7 +487,12 @@ class OntologyAPI:
         validated_params=misc.validate_params(GenericParams)
         results = re_api.query("get_hierarchicalParents", validated_params)
 
-        returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
+        returnVal={"stats": results["stats"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
+        if results.get('error'):
+            returnVal["results"]=[]
+            returnVal["error"]=results.get('error')
+        else:
+            returnVal["results"]=results["results"]
         #END get_hierarchical_parents
 
         # At some point might do deeper type checking...
@@ -480,7 +535,14 @@ class OntologyAPI:
         validated_params=misc.validate_params(GenericParams)
         results = re_api.query("get_associated_ws_objects", validated_params)
 
-        returnVal={"stats": results["stats"], "results": results["results"][0]["results"], "ts": validated_params["ts"], "ns": validated_params["ns"], "total_count": results["results"][0]["total_count"]}
+        returnVal={"stats": results["stats"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
+        if results.get('error'):
+            returnVal["results"]=[]
+            returnVal["total_count"]=0
+            returnVal["error"]=results.get('error')
+        else:
+            returnVal["results"]=results["results"][0]["results"]
+            returnVal["total_count"]=results["results"][0]["total_count"]
         #END get_associated_ws_objects
 
         # At some point might do deeper type checking...
@@ -528,7 +590,14 @@ class OntologyAPI:
         validated_params['obj_ref']=re.sub('/', ':', validated_params['obj_ref'])
         results = re_api.query("get_associated_ws_features", validated_params)
 
-        returnVal={"stats": results["stats"], "results": results["results"][0]["results"], "ts": validated_params["ts"], "ns": validated_params["ns"], "total_count": results["results"][0]["total_count"]}
+        returnVal={"stats": results["stats"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
+        if results.get('error'):
+            returnVal["results"]=[]
+            returnVal["total_count"]=0
+            returnVal["error"]=results.get('error')
+        else:
+            returnVal["results"]=results["results"][0]["results"]
+            returnVal["total_count"]=results["results"][0]["total_count"]
         #END get_associated_ws_features
 
         # At some point might do deeper type checking...
@@ -584,7 +653,12 @@ class OntologyAPI:
 
         results = re_api.query("get_terms_from_ws_feature", validated_params)
 
-        returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
+        returnVal={"stats": results["stats"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
+        if results.get('error'):
+            returnVal["results"]=[]
+            returnVal["error"]=results.get('error')
+        else:
+            returnVal["results"]=results["results"]
         #END get_terms_from_ws_feature
 
         # At some point might do deeper type checking...
@@ -635,7 +709,12 @@ class OntologyAPI:
         validated_params['obj_ref']=re.sub('/', ':', validated_params['obj_ref'])
         results = re_api.query("get_terms_from_ws_obj", validated_params)
 
-        returnVal={"stats": results["stats"], "results": results["results"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
+        returnVal={"stats": results["stats"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
+        if results.get('error'):
+            returnVal["results"]=[]
+            returnVal["error"]=results.get('error')
+        else:
+            returnVal["results"]=results["results"]
         #END get_terms_from_ws_obj
 
         # At some point might do deeper type checking...
