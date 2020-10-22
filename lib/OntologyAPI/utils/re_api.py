@@ -23,8 +23,9 @@ def query(name, params, token=None):
         headers={'Authorization': token}
     )
     if not resp.ok:
-        print("RE Error:", resp.text)
+        error=json.loads(resp.text)
+        #print("RE Error:", json.dumps(error['error']))
         #raise REError(resp)
-        return {'stats': {}, 'results': [], 'error': resp.text}
+        return {'stats': {}, 'results': [], 'error': error['error']}
     return resp.json()
 

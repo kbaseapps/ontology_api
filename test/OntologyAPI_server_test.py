@@ -123,7 +123,7 @@ class OntologyAPITest(unittest.TestCase):
     def test_go_get_associated_ws_objects(self):
         ret = self.serviceImpl.get_associated_ws_objects(self.ctx, {"id": "GO:0016209"})
         returnVal=list(map(lambda x: (x["ws_obj"]["workspace_id"], x["feature_count"]), ret[0]["results"]))
-        self.assertTrue(ret[0]["total_count"] == 42)
+        self.assertTrue(ret[0]["total_count"] == 43)
         self.assertTrue((4258, 17) in returnVal)
 
     def test_go_get_associated_ws_features(self):
@@ -172,3 +172,8 @@ class OntologyAPITest(unittest.TestCase):
         ret = self.serviceImpl.get_terms(self.ctx, {"ids": ["ENVO:00002041", "ENVO:00002006"], "ns": "envo_ontology"})
         returnVal=list(map(lambda x: x["id"], ret[0]["results"]))
         self.assertTrue(set(["ENVO:00002041", "ENVO:00002006"]).issubset(set(returnVal)))
+
+    def test_methods_not_implemented(self):
+        ret = self.serviceImpl.get_associated_ws_objects(self.ctx, {"id": "ENVO:00002006", "ns": "envo_ontology"})
+        self.assertEqual(len(ret[0]["results"]), 0)
+        self.assertTrue("Not found" in ret[0]["error"].get("message"))
