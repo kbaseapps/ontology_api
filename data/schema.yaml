@@ -9,17 +9,6 @@ get_terms:
         limit: {type: integer, maximum: 1000}
         offset: {type: integer, maximum: 100000}
 
-get_metadata:
-    type: object
-    required: [id, ns, ts]
-    properties:
-        id: {type: string}
-        ns: {type: string, enum: []}
-        ts: {type: integer}
-        '@onto_terms': {type: string}
-        limit: {type: integer, maximum: 1000}
-        offset: {type: integer, maximum: 100000}
-
 get_associated_ws_features:
     type: object
     required: [id, ns, ts]
@@ -42,13 +31,24 @@ get_terms_from_ws_feature:
         limit: {type: integer, maximum: 1000}
         offset: {type: integer, maximum: 100000}
 
-get_terms_from_ws_obj:
+get_terms_from_ws_object:
     type: object
     required: [obj_ref, ns, ts]
     properties:
         obj_ref: {type: string}
         ns: {type: string, enum: []}
         ts: {type: integer}
+        limit: {type: integer, maximum: 1000}
+        offset: {type: integer, maximum: 100000}
+
+get_associated_samples:
+    type: object
+    required: [id, ns, ts]
+    properties:
+        id: {type: string}
+        ns: {type: string, enum: []}
+        ts: {type: integer}
+        '@onto_terms': {type: string}
         limit: {type: integer, maximum: 1000}
         offset: {type: integer, maximum: 100000}
 

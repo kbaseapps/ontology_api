@@ -120,8 +120,8 @@ class OntologyAPITest(unittest.TestCase):
         returnVal=list(map(lambda x: x["term"]["id"], ret[0]["results"]))
         self.assertTrue(set(['GO:0007005']).issubset(set(returnVal)))
 
-    def test_go_get_associated_ws_objects(self):
-        ret = self.serviceImpl.get_associated_ws_objects(self.ctx, {"id": "GO:0016209"})
+    def test_go_get_associated_ws_genomes(self):
+        ret = self.serviceImpl.get_associated_ws_genomes(self.ctx, {"id": "GO:0016209"})
         returnVal=list(map(lambda x: (x["ws_obj"]["workspace_id"], x["feature_count"]), ret[0]["results"]))
         self.assertTrue(ret[0]["total_count"] == 43)
         self.assertTrue((4258, 17) in returnVal)
@@ -138,8 +138,8 @@ class OntologyAPITest(unittest.TestCase):
         returnVal=list(map(lambda x: x["terms"][0]["id"], ret[0]["results"]))
         self.assertTrue(set(["GO:0016209"]).issubset(set(returnVal)))
 
-    def test_go_get_terms_from_ws_obj(self):
-        ret = self.serviceImpl.get_terms_from_ws_obj(self.ctx, {"obj_ref": "4258/36981/3"})
+    def test_go_get_terms_from_ws_object(self):
+        ret = self.serviceImpl.get_terms_from_ws_object(self.ctx, {"obj_ref": "4258/36981/3"})
         returnVal=list(map(lambda x: x["terms"][0]["id"], ret[0]["results"]))
         self.assertTrue(set(["GO:0016747"]).issubset(set(returnVal)))
 
@@ -173,7 +173,13 @@ class OntologyAPITest(unittest.TestCase):
         returnVal=list(map(lambda x: x["id"], ret[0]["results"]))
         self.assertTrue(set(["ENVO:00002041", "ENVO:00002006"]).issubset(set(returnVal)))
 
+    def test_envo_get_associated_samples(self):
+        ret = self.serviceImpl.get_associated_samples(self.ctx, {"id": "ENVO:01000221", "ns": "envo_ontology"})
+        returnVal=list(map(lambda x: x["id"], ret[0]["results"]))
+        self.assertTrue(ret[0]["total_count"] == 2)
+        self.assertTrue(set(["0795d792-54e1-430c-b280-da0849d7474c", "465b1476-3699-4e6c-a06b-8d384fcc41f3"]).issubset(set(returnVal)))
+
     def test_methods_not_implemented(self):
-        ret = self.serviceImpl.get_associated_ws_objects(self.ctx, {"id": "ENVO:00002006", "ns": "envo_ontology"})
+        ret = self.serviceImpl.get_associated_ws_genomes(self.ctx, {"id": "ENVO:00002006", "ns": "envo_ontology"})
         self.assertEqual(len(ret[0]["results"]), 0)
         self.assertTrue("Not found" in ret[0]["error"].get("message"))
