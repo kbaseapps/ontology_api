@@ -104,7 +104,7 @@ module OntologyAPI {
     } GetTermsParams;
     
     /*
-      Parameters for get_terms_from_ws_obj
+      Parameters for get_terms_from_ws_feature
       id - required - ontology term id, such as "GO:0016209"
       obj_ref - optional - workspace object ref, such as "6976/926/2"
       ts - optional - fetch documents with this active timestamp, defaults to now
@@ -122,7 +122,7 @@ module OntologyAPI {
     } GetAssociatedWSFeaturesParams;
 
     /*
-      Parameters for get_terms_from_ws_obj
+      Parameters for get_terms_from_ws_object
       obj_ref - required - workspace object ref, such as "6976/926/2"
       ts - optional - fetch documents with this active timestamp, defaults to now
       ns - optional - ontology namespace to use, defaults to "go"
@@ -201,6 +201,24 @@ module OntologyAPI {
         int total_count;
     } GetAssociatedWSObjectsResults;
 
+    /* 
+      Sample data with sample_metadata_key
+      id - sample id
+      name - sample name
+      node_tree - sample metadata
+      save_date - sample data saved date
+      version - sample data version
+      sample_metadata_key - metadata key referencing ontology term
+    */
+    typedef structure {
+        string id;
+        string name;
+        UnspecifiedObject node_tree;
+        int save_date;
+        int version;
+        string sample_metadata_key;
+    } SampleWithMetadataKey;
+
     /*
       Results from get_associated_ws_features
       stats - Query execution information from ArangoDB.
@@ -216,6 +234,22 @@ module OntologyAPI {
         string ns;
         int total_count;
     } GetAssociatedWSFeaturesResults;
+
+    /*
+      Results from get_associated_samples
+      stats - Query execution information from ArangoDB.
+      results - array of SampleWithMetadataKey objects.
+      ts - Timestamp used in the request
+      ns - Ontology namespace used in the request.
+      total_count - total count of associated samples
+    */
+    typedef structure {
+        UnspecifiedObject stats;
+        list<SampleWithMetadataKey> results;
+        int ts;
+        string ns;
+        int total_count;
+    } GetAssociatedSamplesResults;
 
     /*
       Results from get_terms_from_ws_feature
@@ -278,8 +312,8 @@ module OntologyAPI {
     /* Retrieve hierarchical_parents of an ontology term by ID*/
     funcdef get_hierarchical_parents(GenericParams) returns (GenericResults) authentication optional;
 
-    /* Retrieve associated workspace objects of an ontology term by ID*/
-    funcdef get_associated_ws_objects(GenericParams) returns (GetAssociatedWSObjectsResults) authentication optional;
+    /* Retrieve associated workspace genome objects of an ontology term by ID*/
+    funcdef get_associated_ws_genomes(GenericParams) returns (GetAssociatedWSObjectsResults) authentication optional;
 
     /* Retrieve associated workspace genome features of an ontology term by ID and workspace obj_ref*/
     funcdef get_associated_ws_features(GetAssociatedWSFeaturesParams) returns (GetAssociatedWSFeaturesResults) authentication optional;
@@ -288,5 +322,8 @@ module OntologyAPI {
     funcdef get_terms_from_ws_feature(GetTermsFromWSFeatureParams) returns (GetTermsFromWSFeatureResults) authentication optional;
 
     /* Retrieve ontology terms of an workspace object by workspace obj_ref*/
-    funcdef get_terms_from_ws_obj(GetTermsFromWSObjParams) returns (GetTermsFromWSObjResults) authentication optional;
+    funcdef get_terms_from_ws_object(GetTermsFromWSObjParams) returns (GetTermsFromWSObjResults) authentication optional;
+
+    /* Retrieve associated samples of an ontology term by ID*/
+    funcdef get_associated_samples(GenericParams) returns (GetAssociatedSamplesResults) authentication optional;
 };

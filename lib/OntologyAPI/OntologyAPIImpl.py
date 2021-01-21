@@ -22,9 +22,9 @@ class OntologyAPI:
     # state. A method could easily clobber the state set by another while
     # the latter method is running.
     ######################################### noqa
-    VERSION = "0.3.8"
+    VERSION = "0.3.10"
     GIT_URL = "git@github.com:zhlu9890/ontology_api.git"
-    GIT_COMMIT_HASH = "2e5a72260abfd9725b5a4ed52b3186a136e4c519"
+    GIT_COMMIT_HASH = "82072fee5ebc3f75e895068cb687846fee972f78"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -502,9 +502,9 @@ class OntologyAPI:
         # return the results
         return [returnVal]
 
-    def get_associated_ws_objects(self, ctx, GenericParams):
+    def get_associated_ws_genomes(self, ctx, GenericParams):
         """
-        Retrieve associated workspace objects of an ontology term by ID
+        Retrieve associated workspace genome objects of an ontology term by ID
         :param GenericParams: instance of type "GenericParams" (Generic
            Parameters id - required - ontology term id, such as "GO:0016209"
            ts - optional - fetch documents with this active timestamp,
@@ -519,7 +519,8 @@ class OntologyAPI:
            from get_associated_ws_objects stats - Query execution information
            from ArangoDB. results - array of WSObjectsResults objects. ts -
            Timestamp used in the request ns - Ontology namespace used in the
-           request.) -> structure: parameter "stats" of unspecified object,
+           request. total_count - total count of associated workspace
+           objects) -> structure: parameter "stats" of unspecified object,
            parameter "results" of list of type "WSObjectsWithFeatureCount"
            (Workspace obj with count of associated workspace genome features
            feature_count - count of features associated. ws_obj - WSObj
@@ -527,13 +528,14 @@ class OntologyAPI:
            "ws_obj" of type "WSObj" (workspace object) -> structure:
            parameter "workspace_id" of Long, parameter "object_id" of Long,
            parameter "version" of Long, parameter "name" of String, parameter
-           "ts" of Long, parameter "ns" of String
+           "ts" of Long, parameter "ns" of String, parameter "total_count" of
+           Long
         """
         # ctx is the context object
         # return variables are: returnVal
-        #BEGIN get_associated_ws_objects
+        #BEGIN get_associated_ws_genomes
         validated_params=misc.validate_params(GenericParams)
-        results = re_api.query("get_associated_ws_objects", validated_params)
+        results = re_api.query("get_associated_ws_genomes", validated_params)
 
         returnVal={"stats": results["stats"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
         if results.get('error'):
@@ -543,11 +545,11 @@ class OntologyAPI:
         else:
             returnVal["results"]=results["results"][0]["results"]
             returnVal["total_count"]=results["results"][0]["total_count"]
-        #END get_associated_ws_objects
+        #END get_associated_ws_genomes
 
         # At some point might do deeper type checking...
         if not isinstance(returnVal, dict):
-            raise ValueError('Method get_associated_ws_objects return value ' +
+            raise ValueError('Method get_associated_ws_genomes return value ' +
                              'returnVal is not type dict as required.')
         # return the results
         return [returnVal]
@@ -557,8 +559,8 @@ class OntologyAPI:
         Retrieve associated workspace genome features of an ontology term by ID and workspace obj_ref
         :param GetAssociatedWSFeaturesParams: instance of type
            "GetAssociatedWSFeaturesParams" (Parameters for
-           get_terms_from_ws_obj id - required - ontology term id, such as
-           "GO:0016209" obj_ref - optional - workspace object ref, such as
+           get_terms_from_ws_feature id - required - ontology term id, such
+           as "GO:0016209" obj_ref - optional - workspace object ref, such as
            "6976/926/2" ts - optional - fetch documents with this active
            timestamp, defaults to now ns - optional - ontology namespace to
            use, defaults to "go" limit - optional - number of results to
@@ -568,20 +570,22 @@ class OntologyAPI:
            String, parameter "ns" of String, parameter "ts" of Long,
            parameter "limit" of Long, parameter "offset" of Long
         :returns: instance of type "GetAssociatedWSFeaturesResults" (Results
-           from get_associated_ws_objects stats - Query execution information
-           from ArangoDB. results - array of WSObjectsResults objects. ts -
-           Timestamp used in the request ns - Ontology namespace used in the
-           request.) -> structure: parameter "stats" of unspecified object,
-           parameter "results" of list of type "WSObjWithWSFeatures"
-           (Workspace obj with associated workspace genome features ws_obj -
-           WSObj object features - a list of FeatureLite object) ->
-           structure: parameter "ws_obj" of type "WSObj" (workspace object)
-           -> structure: parameter "workspace_id" of Long, parameter
-           "object_id" of Long, parameter "version" of Long, parameter "name"
-           of String, parameter "features" of list of type "FeatureLite"
-           (workspace genome feature, lite version) -> structure: parameter
-           "feature_id" of String, parameter "updated_at" of Long, parameter
-           "ts" of Long, parameter "ns" of String
+           from get_associated_ws_features stats - Query execution
+           information from ArangoDB. results - array of WSObjectsResults
+           objects. ts - Timestamp used in the request ns - Ontology
+           namespace used in the request. total_count - total count of
+           associated workspace features) -> structure: parameter "stats" of
+           unspecified object, parameter "results" of list of type
+           "WSObjWithWSFeatures" (Workspace obj with associated workspace
+           genome features ws_obj - WSObj object features - a list of
+           FeatureLite object) -> structure: parameter "ws_obj" of type
+           "WSObj" (workspace object) -> structure: parameter "workspace_id"
+           of Long, parameter "object_id" of Long, parameter "version" of
+           Long, parameter "name" of String, parameter "features" of list of
+           type "FeatureLite" (workspace genome feature, lite version) ->
+           structure: parameter "feature_id" of String, parameter
+           "updated_at" of Long, parameter "ts" of Long, parameter "ns" of
+           String, parameter "total_count" of Long
         """
         # ctx is the context object
         # return variables are: returnVal
@@ -668,11 +672,11 @@ class OntologyAPI:
         # return the results
         return [returnVal]
 
-    def get_terms_from_ws_obj(self, ctx, GetTermsFromWSObjParams):
+    def get_terms_from_ws_object(self, ctx, GetTermsFromWSObjParams):
         """
         Retrieve ontology terms of an workspace object by workspace obj_ref
         :param GetTermsFromWSObjParams: instance of type
-           "GetTermsFromWSObjParams" (Parameters for get_terms_from_ws_obj
+           "GetTermsFromWSObjParams" (Parameters for get_terms_from_ws_object
            obj_ref - required - workspace object ref, such as "6976/926/2" ts
            - optional - fetch documents with this active timestamp, defaults
            to now ns - optional - ontology namespace to use, defaults to "go"
@@ -704,10 +708,10 @@ class OntologyAPI:
         """
         # ctx is the context object
         # return variables are: returnVal
-        #BEGIN get_terms_from_ws_obj
-        validated_params=misc.validate_params(GetTermsFromWSObjParams, "get_terms_from_ws_obj")
+        #BEGIN get_terms_from_ws_object
+        validated_params=misc.validate_params(GetTermsFromWSObjParams, "get_terms_from_ws_object")
         validated_params['obj_ref']=re.sub('/', ':', validated_params['obj_ref'])
-        results = re_api.query("get_terms_from_ws_obj", validated_params)
+        results = re_api.query("get_terms_from_ws_object", validated_params)
 
         returnVal={"stats": results["stats"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
         if results.get('error'):
@@ -715,11 +719,85 @@ class OntologyAPI:
             returnVal["error"]=results.get('error')
         else:
             returnVal["results"]=results["results"]
-        #END get_terms_from_ws_obj
+        #END get_terms_from_ws_object
 
         # At some point might do deeper type checking...
         if not isinstance(returnVal, dict):
-            raise ValueError('Method get_terms_from_ws_obj return value ' +
+            raise ValueError('Method get_terms_from_ws_object return value ' +
+                             'returnVal is not type dict as required.')
+        # return the results
+        return [returnVal]
+
+    def get_associated_samples(self, ctx, GenericParams):
+        """
+        Retrieve associated samples of an ontology term by ID
+        :param GenericParams: instance of type "GenericParams" (Generic
+           Parameters id - required - ontology term id, such as "GO:0016209"
+           ts - optional - fetch documents with this active timestamp,
+           defaults to now ns - optional - ontology namespace to use,
+           defaults to "go" limit - optional - number of results to return
+           (defaults to 20) offset - optional - number of results to skip
+           (defaults to 0)) -> structure: parameter "id" of type "ID"
+           (Ontology term id, such as "GO:0000002"), parameter "ts" of Long,
+           parameter "ns" of String, parameter "limit" of Long, parameter
+           "offset" of Long
+        :returns: instance of type "GetAssociatedSamplesResults" (Results
+           from get_associated_samples stats - Query execution information
+           from ArangoDB. results - array of SampleWithMetadataKey objects.
+           ts - Timestamp used in the request ns - Ontology namespace used in
+           the request. total_count - total count of associated samples) ->
+           structure: parameter "stats" of unspecified object, parameter
+           "results" of list of type "SampleWithMetadataKey" (Sample data
+           with sample_metadata_key id - sample id name - sample name
+           node_tree - sample metadata save_date - sample data saved date
+           version - sample data version sample_metadata_key - metadata key
+           referencing ontology term) -> structure: parameter "id" of String,
+           parameter "name" of String, parameter "node_tree" of unspecified
+           object, parameter "save_date" of Long, parameter "version" of
+           Long, parameter "sample_metadata_key" of String, parameter "ts" of
+           Long, parameter "ns" of String, parameter "total_count" of Long
+        """
+        # ctx is the context object
+        # return variables are: returnVal
+        #BEGIN get_associated_samples
+        validated_params=misc.validate_params(GenericParams, 'get_associated_samples')
+        results = re_api.query("get_associated_samples", validated_params)
+
+        returnVal={"stats": results["stats"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
+        if results.get('error'):
+            returnVal["results"]=[]
+            returnVal["total_count"]=0
+            returnVal["error"]=results.get('error')
+        else:
+            returnVal["results"]=results["results"][0]["results"]
+            returnVal["total_count"]=results["results"][0]["total_count"]
+        for i, x in enumerate(returnVal["results"]):
+            sample={"sample_metadata_key": x["sample_metadata_key"], "id": x["sample"]["id"], "save_date": int(x["sample"]["saved"] * 1000), 
+                "version": x["sample"]["ver"]}
+            node_tree={"id": x["sample"]["name"], "type": x["sample"]["type"], "parent": x["sample"]["parent"]}
+            meta_controlled={}
+            for m in x["sample"].get("cmeta", []):
+                meta_controlled[m["ok"]]={m["k"]: m["v"]}
+            sample_name=meta_controlled.get("name", None)
+            sample["name"]=sample_name["value"] if sample_name is not None else None
+            node_tree["meta_controlled"]=meta_controlled
+            meta_user={}
+            for m in x["sample"].get("ucmeta", []):
+                meta_user[m["ok"]]={m["k"]: m["v"]}
+            node_tree["meta_user"]=meta_user
+            source_meta={}
+            for m in x["sample"].get("smeta", []):
+                source_meta["key"]=m["k"]
+                source_meta["skey"]=m["sk"]
+                source_meta["svalue"]=m["v"]
+            node_tree["source_meta"]=source_meta
+            sample["node_tree"]=[node_tree]
+            returnVal["results"][i]=sample
+        #END get_associated_samples
+
+        # At some point might do deeper type checking...
+        if not isinstance(returnVal, dict):
+            raise ValueError('Method get_associated_samples return value ' +
                              'returnVal is not type dict as required.')
         # return the results
         return [returnVal]
