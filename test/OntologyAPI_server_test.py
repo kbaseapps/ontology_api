@@ -178,7 +178,6 @@ class OntologyAPITest(unittest.TestCase):
         returnVal=list(map(lambda x: x["id"], ret[0]["results"]))
         self.assertTrue(ret[0]["total_count"] == 2)
         self.assertTrue(set(["0795d792-54e1-430c-b280-da0849d7474c", "465b1476-3699-4e6c-a06b-8d384fcc41f3"]).issubset(set(returnVal)))
-        pprint(ret[0]["results"])
 
     def test_methods_not_implemented(self):
         ret = self.serviceImpl.get_associated_ws_genomes(self.ctx, {"id": "ENVO:00002006", "ns": "envo_ontology"})
