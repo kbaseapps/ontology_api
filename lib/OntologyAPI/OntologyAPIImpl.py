@@ -22,9 +22,9 @@ class OntologyAPI:
     # state. A method could easily clobber the state set by another while
     # the latter method is running.
     ######################################### noqa
-    VERSION = "0.3.10"
+    VERSION = "0.3.11"
     GIT_URL = "git@github.com:zhlu9890/ontology_api.git"
-    GIT_COMMIT_HASH = "82072fee5ebc3f75e895068cb687846fee972f78"
+    GIT_COMMIT_HASH = "3252a0ee19c691570da69379a63fd091b3432782"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -760,6 +760,7 @@ class OntologyAPI:
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN get_associated_samples
+        user_id=ctx.get('user_id')
         validated_params=misc.validate_params(GenericParams, 'get_associated_samples')
         results = re_api.query("get_associated_samples", validated_params)
 
@@ -769,30 +770,44 @@ class OntologyAPI:
             returnVal["total_count"]=0
             returnVal["error"]=results.get('error')
         else:
-            returnVal["results"]=results["results"][0]["results"]
             returnVal["total_count"]=results["results"][0]["total_count"]
-        for i, x in enumerate(returnVal["results"]):
-            sample={"sample_metadata_key": x["sample_metadata_key"], "id": x["sample"]["id"], "save_date": int(x["sample"]["saved"] * 1000), 
-                "version": x["sample"]["ver"]}
-            node_tree={"id": x["sample"]["name"], "type": x["sample"]["type"], "parent": x["sample"]["parent"]}
-            meta_controlled={}
-            for m in x["sample"].get("cmeta", []):
-                meta_controlled[m["ok"]]={m["k"]: m["v"]}
-            sample_name=meta_controlled.get("name", None)
-            sample["name"]=sample_name["value"] if sample_name is not None else None
-            node_tree["meta_controlled"]=meta_controlled
-            meta_user={}
-            for m in x["sample"].get("ucmeta", []):
-                meta_user[m["ok"]]={m["k"]: m["v"]}
-            node_tree["meta_user"]=meta_user
-            source_meta={}
-            for m in x["sample"].get("smeta", []):
-                source_meta["key"]=m["k"]
-                source_meta["skey"]=m["sk"]
-                source_meta["svalue"]=m["v"]
-            node_tree["source_meta"]=source_meta
-            sample["node_tree"]=[node_tree]
-            returnVal["results"][i]=sample
+            returnVal["results"]=[]
+            for x in results["results"][0]["results"]:
+                _sample_access=x.get("sample_access")
+                _sample_metadata_key=x.get("sample_metadata_key")
+                _sample=x.get("sample")
+                if None in [_sample, _sample_metadata_key, _sample_access]:
+                    continue
+                if not _sample_access["acls"]["pubread"] \
+                    and user_id != _sample_access["acls"]["owner"] \
+                    and user_id not in _sample_access["acls"]["admin"] \
+                    and user_id not in _sample_access["acls"]["read"]:
+                    continue
+                sample={"id": _sample["id"], "save_date": int(_sample["saved"] * 1000), 
+                    "version": _sample["ver"], "user": _sample_access["acls"]["owner"]}
+                node_tree={"id": _sample["name"], "type": _sample["type"], "parent": _sample["parent"]}
+                meta_controlled={}
+                for m in _sample.get("cmeta", []):
+                    if m["ok"] not in meta_controlled:
+                        meta_controlled[m["ok"]]={}
+                    meta_controlled[m["ok"]][m["k"]]=m["v"]
+                sample_name=meta_controlled.get("name")
+                sample["name"]=sample_name["value"] if sample_name is not None else None
+                node_tree["meta_controlled"]=meta_controlled
+                meta_user={}
+                for m in _sample.get("ucmeta", []):
+                    if m["ok"] not in meta_user:
+                        meta_user[m["ok"]]={}
+                    meta_user[m["ok"]][m["k"]]=m["v"]
+                node_tree["meta_user"]=meta_user
+                source_meta={}
+                for m in _sample.get("smeta", []):
+                    source_meta["key"]=m["k"]
+                    source_meta["skey"]=m["sk"]
+                    source_meta["svalue"]=m["v"]
+                node_tree["source_meta"]=source_meta
+                sample["node_tree"]=[node_tree]
+                returnVal["results"].append({"sample": sample, "sample_metadata_key": _sample_metadata_key})
         #END get_associated_samples
 
         # At some point might do deeper type checking...
