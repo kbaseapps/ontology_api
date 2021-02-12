@@ -3,7 +3,8 @@
 import logging
 import re
 
-from OntologyAPI.utils import re_api, misc
+from OntologyAPI.utils import re_api, misc, namespace
+from installed_clients.authclient import KBaseAuth
 #END_HEADER
 
 
@@ -23,8 +24,8 @@ class OntologyAPI:
     # the latter method is running.
     ######################################### noqa
     VERSION = "0.3.11"
-    GIT_URL = "git@github.com:zhlu9890/ontology_api.git"
-    GIT_COMMIT_HASH = "3252a0ee19c691570da69379a63fd091b3432782"
+    GIT_URL = ""
+    GIT_COMMIT_HASH = "92a2aaf04d69eff45c9a9ff26afdd17e1fb962a0"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -816,6 +817,27 @@ class OntologyAPI:
                              'returnVal is not type dict as required.')
         # return the results
         return [returnVal]
+
+    def get_namespaces(self, ctx):
+        """
+        :returns: instance of type "GetNamespacesResults" -> structure:
+           parameter "namespaces" of unspecified object
+        """
+        # ctx is the context object
+        # return variables are: results
+        #BEGIN get_namespaces
+        # function for retrieving current iteration of namespace.yaml file
+        # make sure request is made by an admin
+        namespaces = namespace.load_namespaces()
+        results = {'namespaces': namespaces}
+        #END get_namespaces
+
+        # At some point might do deeper type checking...
+        if not isinstance(results, dict):
+            raise ValueError('Method get_namespaces return value ' +
+                             'results is not type dict as required.')
+        # return the results
+        return [results]
     def status(self, ctx):
         #BEGIN_STATUS
         returnVal = {'state': "OK",
