@@ -43,9 +43,10 @@ get_terms_from_ws_object:
 
 get_associated_samples:
     type: object
-    required: [id, ns, ts]
+    required: [id, user_id, ns, ts]
     properties:
         id: {type: string}
+        user_id: {type: string}
         ns: {type: string, enum: []}
         ts: {type: integer}
         '@onto_terms': {type: string}
