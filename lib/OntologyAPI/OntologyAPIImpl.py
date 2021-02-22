@@ -4,6 +4,7 @@ import logging
 import re
 
 from OntologyAPI.utils import re_api, misc
+from OntologyAPI.exceptions import InvalidUserError, REError
 #END_HEADER
 
 
@@ -22,9 +23,9 @@ class OntologyAPI:
     # state. A method could easily clobber the state set by another while
     # the latter method is running.
     ######################################### noqa
-    VERSION = "0.3.11"
+    VERSION = "0.3.12"
     GIT_URL = "git@github.com:zhlu9890/ontology_api.git"
-    GIT_COMMIT_HASH = "3252a0ee19c691570da69379a63fd091b3432782"
+    GIT_COMMIT_HASH = "0c38e69e2bd66019cf56a7f514473c9bc3a762dc"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -761,6 +762,10 @@ class OntologyAPI:
         # return variables are: returnVal
         #BEGIN get_associated_samples
         user_id=ctx.get('user_id')
+        if not user_id:
+            raise InvalidUser 
+        GenericParams["user_id"]=user_id
+        GenericParams["user_id"]='sunita'
         validated_params=misc.validate_params(GenericParams, 'get_associated_samples')
         results = re_api.query("get_associated_samples", validated_params)
 
@@ -768,23 +773,20 @@ class OntologyAPI:
         if results.get('error'):
             returnVal["results"]=[]
             returnVal["total_count"]=0
+            returnVal["total_accessible_count"]=0
             returnVal["error"]=results.get('error')
         else:
             returnVal["total_count"]=results["results"][0]["total_count"]
+            returnVal["total_accessible_count"]=results["results"][0]["total_accessible_count"]
             returnVal["results"]=[]
             for x in results["results"][0]["results"]:
-                _sample_access=x.get("sample_access")
                 _sample_metadata_key=x.get("sample_metadata_key")
                 _sample=x.get("sample")
-                if None in [_sample, _sample_metadata_key, _sample_access]:
-                    continue
-                if not _sample_access["acls"]["pubread"] \
-                    and user_id != _sample_access["acls"]["owner"] \
-                    and user_id not in _sample_access["acls"]["admin"] \
-                    and user_id not in _sample_access["acls"]["read"]:
+                if None in [_sample, _sample_metadata_key]:
+                    returnVal["results"].append({})
                     continue
                 sample={"id": _sample["id"], "save_date": int(_sample["saved"] * 1000), 
-                    "version": _sample["ver"], "user": _sample_access["acls"]["owner"]}
+                    "version": _sample["ver"]}
                 node_tree={"id": _sample["name"], "type": _sample["type"], "parent": _sample["parent"]}
                 meta_controlled={}
                 for m in _sample.get("cmeta", []):

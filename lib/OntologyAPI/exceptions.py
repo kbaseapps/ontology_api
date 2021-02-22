@@ -8,6 +8,10 @@ class InvalidParamsError(Error):
     def __init__(self, message):
         self.message = message
 
+class InvalidUserError(Error):
+    def __init__(self, message):
+         self.message = message
+
 class REError(Error):
     """Error from the RE API."""
 
