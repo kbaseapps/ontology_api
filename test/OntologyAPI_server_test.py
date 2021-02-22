@@ -8,6 +8,7 @@ from OntologyAPI.OntologyAPIImpl import OntologyAPI
 from OntologyAPI.OntologyAPIServer import MethodContext
 from OntologyAPI.authclient import KBaseAuth as _KBaseAuth
 from OntologyAPI.exceptions import InvalidParamsError, REError
+from OntologyAPI.utils import namespace
 from pprint import pprint
 
 from installed_clients.WorkspaceClient import Workspace
@@ -55,6 +56,12 @@ class OntologyAPITest(unittest.TestCase):
             print('Test workspace was deleted')
 
     # NOTE: According to Python unittest naming rules test method names should start from 'test'. # noqa
+
+    def test_get_namespaces(self):
+        ret = self.serviceImpl.get_namespaces(self.ctx)
+        fn_namespaces = ret[0]['namespaces']
+        loaded_namespaces = namespace.load_namespaces()
+        self.assertEqual(fn_namespaces, loaded_namespaces)
 
     def test_go_status(self):
       ret = self.serviceImpl.status(self.ctx)

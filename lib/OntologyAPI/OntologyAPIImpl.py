@@ -3,7 +3,7 @@
 import logging
 import re
 
-from OntologyAPI.utils import re_api, misc
+from OntologyAPI.utils import re_api, misc, namespace
 from OntologyAPI.exceptions import InvalidUserError, REError
 #END_HEADER
 
@@ -818,6 +818,27 @@ class OntologyAPI:
                              'returnVal is not type dict as required.')
         # return the results
         return [returnVal]
+
+    def get_namespaces(self, ctx):
+        """
+        :returns: instance of type "GetNamespacesResults" -> structure:
+           parameter "namespaces" of unspecified object
+        """
+        # ctx is the context object
+        # return variables are: results
+        #BEGIN get_namespaces
+        # function for retrieving current iteration of namespace.yaml file
+        # make sure request is made by an admin
+        namespaces = namespace.load_namespaces()
+        results = {'namespaces': namespaces}
+        #END get_namespaces
+
+        # At some point might do deeper type checking...
+        if not isinstance(results, dict):
+            raise ValueError('Method get_namespaces return value ' +
+                             'results is not type dict as required.')
+        # return the results
+        return [results]
     def status(self, ctx):
         #BEGIN_STATUS
         returnVal = {'state': "OK",
