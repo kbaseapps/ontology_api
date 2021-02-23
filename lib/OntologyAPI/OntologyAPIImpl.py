@@ -4,7 +4,7 @@ import logging
 import re
 
 from OntologyAPI.utils import re_api, misc, namespace
-from OntologyAPI.exceptions import InvalidUserError, REError
+from OntologyAPI.exceptions import InvalidUserError
 #END_HEADER
 
 
@@ -763,9 +763,8 @@ class OntologyAPI:
         #BEGIN get_associated_samples
         user_id=ctx.get('user_id')
         if not user_id:
-            raise InvalidUser 
+            raise InvalidUserError
         GenericParams["user_id"]=user_id
-        GenericParams["user_id"]='sunita'
         validated_params=misc.validate_params(GenericParams, 'get_associated_samples')
         results = re_api.query("get_associated_samples", validated_params)
 
