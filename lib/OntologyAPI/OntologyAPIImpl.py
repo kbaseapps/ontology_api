@@ -4,7 +4,7 @@ import logging
 import re
 
 from OntologyAPI.utils import re_api, misc, namespace
-from OntologyAPI.exceptions import InvalidUserError, REError
+from OntologyAPI.exceptions import InvalidUserError
 #END_HEADER
 
 
@@ -25,7 +25,7 @@ class OntologyAPI:
     ######################################### noqa
     VERSION = "0.3.12"
     GIT_URL = "git@github.com:zhlu9890/ontology_api.git"
-    GIT_COMMIT_HASH = "0c38e69e2bd66019cf56a7f514473c9bc3a762dc"
+    GIT_COMMIT_HASH = "f5eabffc7b3e56df29556c8637f4a970ea5d9548"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -763,9 +763,8 @@ class OntologyAPI:
         #BEGIN get_associated_samples
         user_id=ctx.get('user_id')
         if not user_id:
-            raise InvalidUser 
+            raise InvalidUserError
         GenericParams["user_id"]=user_id
-        GenericParams["user_id"]='sunita'
         validated_params=misc.validate_params(GenericParams, 'get_associated_samples')
         results = re_api.query("get_associated_samples", validated_params)
 
@@ -780,13 +779,14 @@ class OntologyAPI:
             returnVal["total_accessible_count"]=results["results"][0]["total_accessible_count"]
             returnVal["results"]=[]
             for x in results["results"][0]["results"]:
+                _sample_access=x.get("sample_access")
                 _sample_metadata_key=x.get("sample_metadata_key")
                 _sample=x.get("sample")
-                if None in [_sample, _sample_metadata_key]:
+                if None in [_sample, _sample_metadata_key, _sample_access]:
                     returnVal["results"].append({})
                     continue
                 sample={"id": _sample["id"], "save_date": int(_sample["saved"] * 1000), 
-                    "version": _sample["ver"]}
+                    "version": _sample["ver"], "user": _sample_access["acls"]["owner"]}
                 node_tree={"id": _sample["name"], "type": _sample["type"], "parent": _sample["parent"]}
                 meta_controlled={}
                 for m in _sample.get("cmeta", []):
