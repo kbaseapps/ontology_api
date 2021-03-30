@@ -785,7 +785,7 @@ class OntologyAPI:
                 if None in [_sample, _sample_metadata_key, _sample_access]:
                     returnVal["results"].append({})
                     continue
-                sample={"id": _sample["id"], "save_date": int(_sample["saved"] * 1000), 
+                sample={"id": _sample["id"], "save_date": _sample["saved"], 
                     "version": _sample["ver"], "user": _sample_access["acls"]["owner"]}
                 node_tree={"id": _sample["name"], "type": _sample["type"], "parent": _sample["parent"]}
                 meta_controlled={}
