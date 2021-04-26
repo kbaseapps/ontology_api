@@ -130,7 +130,6 @@ class OntologyAPITest(unittest.TestCase):
     def test_go_get_associated_ws_genomes(self):
         ret = self.serviceImpl.get_associated_ws_genomes(self.ctx, {"id": "GO:0016209"})
         returnVal=list(map(lambda x: (x["ws_obj"]["workspace_id"], x["feature_count"]), ret[0]["results"]))
-        self.assertTrue(ret[0]["total_count"] == 43)
         self.assertTrue((4258, 17) in returnVal)
 
     def test_go_get_associated_ws_features(self):
@@ -185,6 +184,11 @@ class OntologyAPITest(unittest.TestCase):
         returnVal=list(map(lambda x: x["sample"]["id"], ret[0]["results"]))
         self.assertTrue(ret[0]["total_accessible_count"] == 1)
         #self.assertTrue(set(["0795d792-54e1-430c-b280-da0849d7474c", "465b1476-3699-4e6c-a06b-8d384fcc41f3"]).issubset(set(returnVal)))
+
+    def test_envo_get_term_by_name(self):
+        ret = self.serviceImpl.get_term_by_name(self.ctx, {"name": "terrestrial biome", "ancestor_term":"ENVO:00000428", "ns": "envo_ontology"})
+        returnVal=list(map(lambda x: x["id"], ret[0]["results"]))
+        self.assertTrue(set(["ENVO:00000446"]).issubset(set(returnVal)))
 
     def test_methods_not_implemented(self):
         ret = self.serviceImpl.get_associated_ws_genomes(self.ctx, {"id": "ENVO:00002006", "ns": "envo_ontology"})

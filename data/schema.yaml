@@ -9,6 +9,19 @@ get_terms:
         limit: {type: integer, maximum: 1000}
         offset: {type: integer, maximum: 100000}
 
+get_term_by_name:
+    type: object
+    required: [name, ns, ts]
+    properties:
+        name: {type: string}
+        ancestor_term: {type: string} 
+        ns: {type: string, enum: []}
+        ts: {type: integer}
+        '@onto_terms': {type: string}
+        '@onto_edges': {type: string}
+        limit: {type: integer, maximum: 1000}
+        offset: {type: integer, maximum: 100000}
+
 get_associated_ws_features:
     type: object
     required: [id, ns, ts]

@@ -23,9 +23,9 @@ class OntologyAPI:
     # state. A method could easily clobber the state set by another while
     # the latter method is running.
     ######################################### noqa
-    VERSION = "0.3.12"
+    VERSION = "0.3.13"
     GIT_URL = "git@github.com:zhlu9890/ontology_api.git"
-    GIT_COMMIT_HASH = "f5eabffc7b3e56df29556c8637f4a970ea5d9548"
+    GIT_COMMIT_HASH = "89108fd0e35d1bf76c31356e3117b6d26aaefdeb"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -815,6 +815,43 @@ class OntologyAPI:
         # At some point might do deeper type checking...
         if not isinstance(returnVal, dict):
             raise ValueError('Method get_associated_samples return value ' +
+                             'returnVal is not type dict as required.')
+        # return the results
+        return [returnVal]
+
+    def get_term_by_name(self, ctx, GetTermByNameParams):
+        """
+        Retrieve ontology term by name
+        :param GetTermByNameParams: instance of type "GetTermByNameParams" ->
+           structure: parameter "name" of String, parameter "ancestor_term"
+           of type "ID" (Ontology term id, such as "GO:0000002"), parameter
+           "ts" of Long, parameter "ns" of String, parameter "limit" of Long,
+           parameter "offset" of Long
+        :returns: instance of type "GenericResults" (Generic results stats -
+           Query execution information from ArangoDB. results - array of
+           objects of results. ts - Timestamp used in the request ns -
+           Ontology namespace used in the request.) -> structure: parameter
+           "stats" of unspecified object, parameter "results" of list of
+           unspecified object, parameter "ts" of Long, parameter "ns" of
+           String
+        """
+        # ctx is the context object
+        # return variables are: returnVal
+        #BEGIN get_term_by_name
+        validated_params=misc.validate_params(GetTermByNameParams, 'get_term_by_name')
+        results = re_api.query("get_term_by_name", validated_params)
+
+        returnVal={"stats": results["stats"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
+        if results.get('error'):
+            returnVal["results"]=[]
+            returnVal["error"]=results.get('error')
+        else:
+            returnVal["results"]=results["results"]
+        #END get_term_by_name
+
+        # At some point might do deeper type checking...
+        if not isinstance(returnVal, dict):
+            raise ValueError('Method get_term_by_name return value ' +
                              'returnVal is not type dict as required.')
         # return the results
         return [returnVal]

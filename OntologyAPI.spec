@@ -155,6 +155,15 @@ module OntologyAPI {
         int  offset;
     } GetTermsFromWSFeatureParams;
 
+    typedef structure {
+        string name;
+        ID ancestor_term;
+        int ts;
+        string ns;
+        int  limit;
+        int  offset;
+    } GetTermByNameParams;
+
     /*
       Generic Parameters 
       id - required - ontology term id, such as "GO:0016209"
@@ -281,7 +290,7 @@ module OntologyAPI {
 
     typedef structure {
       UnspecifiedObject namespaces;
-    }GetNamespacesResults;
+    } GetNamespacesResults;
 
     /* Retrieve descendants of an ontology term by ID*/
     funcdef get_descendants(GenericParams) returns (GenericResults) authentication optional;
@@ -330,6 +339,9 @@ module OntologyAPI {
 
     /* Retrieve associated samples of an ontology term by ID*/
     funcdef get_associated_samples(GenericParams) returns (GetAssociatedSamplesResults) authentication optional;
+
+    /* Retrieve ontology term by name */
+    funcdef get_term_by_name(GetTermByNameParams) returns (GenericResults) authentication optional;
 
     funcdef get_namespaces() returns (GetNamespacesResults results) authentication required;
 };
