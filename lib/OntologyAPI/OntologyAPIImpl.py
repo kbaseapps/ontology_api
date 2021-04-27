@@ -23,9 +23,9 @@ class OntologyAPI:
     # state. A method could easily clobber the state set by another while
     # the latter method is running.
     ######################################### noqa
-    VERSION = "0.3.12"
+    VERSION = "0.3.13"
     GIT_URL = "git@github.com:zhlu9890/ontology_api.git"
-    GIT_COMMIT_HASH = "f5eabffc7b3e56df29556c8637f4a970ea5d9548"
+    GIT_COMMIT_HASH = "90866d13643b035d4ec4ce241e96822499bf301e"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -297,15 +297,15 @@ class OntologyAPI:
         """
         Retrieve metadata of a list of ontology terms by IDs
         :param GetTermsParams: instance of type "GetTermsParams" (Parameters
-           for get_terms ids - required - a list of name ontology term id,
-           such as '["GO:0000002", "GO:0000266"]' ts - optional - fetch
-           documents with this active timestamp, defaults to now ns -
-           optional - ontology namespace to use, defaults to "go" limit -
-           optional - number of results to return (defaults to 20) offset -
-           optional - number of results to skip (defaults to 0)) ->
-           structure: parameter "ids" of list of type "ID" (Ontology term id,
-           such as "GO:0000002"), parameter "ts" of Long, parameter "ns" of
-           String, parameter "limit" of Long, parameter "offset" of Long
+           for get_terms ids - required - a list of ontology term id, such as
+           '["GO:0000002", "GO:0000266"]' ts - optional - fetch documents
+           with this active timestamp, defaults to now ns - optional -
+           ontology namespace to use, defaults to "go" limit - optional -
+           number of results to return (defaults to 20) offset - optional -
+           number of results to skip (defaults to 0)) -> structure: parameter
+           "ids" of list of type "ID" (Ontology term id, such as
+           "GO:0000002"), parameter "ts" of Long, parameter "ns" of String,
+           parameter "limit" of Long, parameter "offset" of Long
         :returns: instance of type "GenericResults" (Generic results stats -
            Query execution information from ArangoDB. results - array of
            objects of results. ts - Timestamp used in the request ns -
@@ -815,6 +815,50 @@ class OntologyAPI:
         # At some point might do deeper type checking...
         if not isinstance(returnVal, dict):
             raise ValueError('Method get_associated_samples return value ' +
+                             'returnVal is not type dict as required.')
+        # return the results
+        return [returnVal]
+
+    def get_term_by_name(self, ctx, GetTermByNameParams):
+        """
+        Retrieve ontology term by name
+        :param GetTermByNameParams: instance of type "GetTermByNameParams"
+           (Parameters for get_term_by_name name - required - ontology name
+           for search, such as "terrestrial biome" ancestor_term - optional -
+           ontology term id of an ancestor ontology node ts - optional -
+           fetch documents with this active timestamp, defaults to now ns -
+           optional - ontology namespace to use, defaults to "go" limit -
+           optional - number of results to return (defaults to 20) offset -
+           optional - number of results to skip (defaults to 0)) ->
+           structure: parameter "name" of String, parameter "ancestor_term"
+           of type "ID" (Ontology term id, such as "GO:0000002"), parameter
+           "ts" of Long, parameter "ns" of String, parameter "limit" of Long,
+           parameter "offset" of Long
+        :returns: instance of type "GenericResults" (Generic results stats -
+           Query execution information from ArangoDB. results - array of
+           objects of results. ts - Timestamp used in the request ns -
+           Ontology namespace used in the request.) -> structure: parameter
+           "stats" of unspecified object, parameter "results" of list of
+           unspecified object, parameter "ts" of Long, parameter "ns" of
+           String
+        """
+        # ctx is the context object
+        # return variables are: returnVal
+        #BEGIN get_term_by_name
+        validated_params=misc.validate_params(GetTermByNameParams, 'get_term_by_name')
+        results = re_api.query("get_term_by_name", validated_params)
+
+        returnVal={"stats": results["stats"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
+        if results.get('error'):
+            returnVal["results"]=[]
+            returnVal["error"]=results.get('error')
+        else:
+            returnVal["results"]=results["results"]
+        #END get_term_by_name
+
+        # At some point might do deeper type checking...
+        if not isinstance(returnVal, dict):
+            raise ValueError('Method get_term_by_name return value ' +
                              'returnVal is not type dict as required.')
         # return the results
         return [returnVal]

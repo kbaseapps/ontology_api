@@ -402,6 +402,10 @@ class Application(object):
                              name='OntologyAPI.get_associated_samples',
                              types=[dict])
         self.method_authentication['OntologyAPI.get_associated_samples'] = 'optional'  # noqa
+        self.rpc_service.add(impl_OntologyAPI.get_term_by_name,
+                             name='OntologyAPI.get_term_by_name',
+                             types=[dict])
+        self.method_authentication['OntologyAPI.get_term_by_name'] = 'optional'  # noqa
         self.rpc_service.add(impl_OntologyAPI.get_namespaces,
                              name='OntologyAPI.get_namespaces',
                              types=[])

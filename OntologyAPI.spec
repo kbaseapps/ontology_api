@@ -89,7 +89,7 @@ module OntologyAPI {
 
     /*
       Parameters for get_terms
-      ids - required - a list of name ontology term id, such as '["GO:0000002", "GO:0000266"]'
+      ids - required - a list of ontology term id, such as '["GO:0000002", "GO:0000266"]'
       ts - optional - fetch documents with this active timestamp, defaults to now
       ns - optional - ontology namespace to use, defaults to "go"
       limit - optional - number of results to return (defaults to 20)
@@ -154,6 +154,24 @@ module OntologyAPI {
         int  limit;
         int  offset;
     } GetTermsFromWSFeatureParams;
+
+    /*
+      Parameters for get_term_by_name
+      name - required - ontology name for search, such as "terrestrial biome"
+      ancestor_term - optional - ontology term id of an ancestor ontology node
+      ts - optional - fetch documents with this active timestamp, defaults to now
+      ns - optional - ontology namespace to use, defaults to "go"
+      limit - optional - number of results to return (defaults to 20)
+      offset - optional - number of results to skip (defaults to 0)
+    */
+    typedef structure {
+        string name;
+        ID ancestor_term;
+        int ts;
+        string ns;
+        int  limit;
+        int  offset;
+    } GetTermByNameParams;
 
     /*
       Generic Parameters 
@@ -281,7 +299,7 @@ module OntologyAPI {
 
     typedef structure {
       UnspecifiedObject namespaces;
-    }GetNamespacesResults;
+    } GetNamespacesResults;
 
     /* Retrieve descendants of an ontology term by ID*/
     funcdef get_descendants(GenericParams) returns (GenericResults) authentication optional;
@@ -330,6 +348,9 @@ module OntologyAPI {
 
     /* Retrieve associated samples of an ontology term by ID*/
     funcdef get_associated_samples(GenericParams) returns (GetAssociatedSamplesResults) authentication optional;
+
+    /* Retrieve ontology term by name */
+    funcdef get_term_by_name(GetTermByNameParams) returns (GenericResults) authentication optional;
 
     funcdef get_namespaces() returns (GetNamespacesResults results) authentication required;
 };
