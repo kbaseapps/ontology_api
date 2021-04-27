@@ -189,6 +189,9 @@ class OntologyAPITest(unittest.TestCase):
         ret = self.serviceImpl.get_term_by_name(self.ctx, {"name": "terrestrial biome", "ancestor_term":"ENVO:00000428", "ns": "envo_ontology"})
         returnVal=list(map(lambda x: x["id"], ret[0]["results"]))
         self.assertTrue(set(["ENVO:00000446"]).issubset(set(returnVal)))
+        ret = self.serviceImpl.get_term_by_name(self.ctx, {"name": "terrestrial biome", "ns": "envo_ontology"})
+        returnVal=list(map(lambda x: x["id"], ret[0]["results"]))
+        self.assertTrue(set(["ENVO:00000446"]).issubset(set(returnVal)))
 
     def test_methods_not_implemented(self):
         ret = self.serviceImpl.get_associated_ws_genomes(self.ctx, {"id": "ENVO:00002006", "ns": "envo_ontology"})
