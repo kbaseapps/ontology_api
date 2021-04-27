@@ -89,7 +89,7 @@ module OntologyAPI {
 
     /*
       Parameters for get_terms
-      ids - required - a list of name ontology term id, such as '["GO:0000002", "GO:0000266"]'
+      ids - required - a list of ontology term id, such as '["GO:0000002", "GO:0000266"]'
       ts - optional - fetch documents with this active timestamp, defaults to now
       ns - optional - ontology namespace to use, defaults to "go"
       limit - optional - number of results to return (defaults to 20)
@@ -155,6 +155,15 @@ module OntologyAPI {
         int  offset;
     } GetTermsFromWSFeatureParams;
 
+    /*
+      Parameters for get_term_by_name
+      name - required - ontology name for search, such as "terrestrial biome"
+      ancestor_term - optional - ontology term id of an ancestor ontology node
+      ts - optional - fetch documents with this active timestamp, defaults to now
+      ns - optional - ontology namespace to use, defaults to "go"
+      limit - optional - number of results to return (defaults to 20)
+      offset - optional - number of results to skip (defaults to 0)
+    */
     typedef structure {
         string name;
         ID ancestor_term;

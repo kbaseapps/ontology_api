@@ -25,7 +25,7 @@ class OntologyAPI:
     ######################################### noqa
     VERSION = "0.3.13"
     GIT_URL = "git@github.com:zhlu9890/ontology_api.git"
-    GIT_COMMIT_HASH = "89108fd0e35d1bf76c31356e3117b6d26aaefdeb"
+    GIT_COMMIT_HASH = "90866d13643b035d4ec4ce241e96822499bf301e"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -297,15 +297,15 @@ class OntologyAPI:
         """
         Retrieve metadata of a list of ontology terms by IDs
         :param GetTermsParams: instance of type "GetTermsParams" (Parameters
-           for get_terms ids - required - a list of name ontology term id,
-           such as '["GO:0000002", "GO:0000266"]' ts - optional - fetch
-           documents with this active timestamp, defaults to now ns -
-           optional - ontology namespace to use, defaults to "go" limit -
-           optional - number of results to return (defaults to 20) offset -
-           optional - number of results to skip (defaults to 0)) ->
-           structure: parameter "ids" of list of type "ID" (Ontology term id,
-           such as "GO:0000002"), parameter "ts" of Long, parameter "ns" of
-           String, parameter "limit" of Long, parameter "offset" of Long
+           for get_terms ids - required - a list of ontology term id, such as
+           '["GO:0000002", "GO:0000266"]' ts - optional - fetch documents
+           with this active timestamp, defaults to now ns - optional -
+           ontology namespace to use, defaults to "go" limit - optional -
+           number of results to return (defaults to 20) offset - optional -
+           number of results to skip (defaults to 0)) -> structure: parameter
+           "ids" of list of type "ID" (Ontology term id, such as
+           "GO:0000002"), parameter "ts" of Long, parameter "ns" of String,
+           parameter "limit" of Long, parameter "offset" of Long
         :returns: instance of type "GenericResults" (Generic results stats -
            Query execution information from ArangoDB. results - array of
            objects of results. ts - Timestamp used in the request ns -
@@ -822,7 +822,14 @@ class OntologyAPI:
     def get_term_by_name(self, ctx, GetTermByNameParams):
         """
         Retrieve ontology term by name
-        :param GetTermByNameParams: instance of type "GetTermByNameParams" ->
+        :param GetTermByNameParams: instance of type "GetTermByNameParams"
+           (Parameters for get_term_by_name name - required - ontology name
+           for search, such as "terrestrial biome" ancestor_term - optional -
+           ontology term id of an ancestor ontology node ts - optional -
+           fetch documents with this active timestamp, defaults to now ns -
+           optional - ontology namespace to use, defaults to "go" limit -
+           optional - number of results to return (defaults to 20) offset -
+           optional - number of results to skip (defaults to 0)) ->
            structure: parameter "name" of String, parameter "ancestor_term"
            of type "ID" (Ontology term id, such as "GO:0000002"), parameter
            "ts" of Long, parameter "ns" of String, parameter "limit" of Long,
