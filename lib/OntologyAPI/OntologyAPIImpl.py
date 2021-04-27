@@ -23,9 +23,9 @@ class OntologyAPI:
     # state. A method could easily clobber the state set by another while
     # the latter method is running.
     ######################################### noqa
-    VERSION = "0.3.13"
+    VERSION = "0.3.14"
     GIT_URL = "git@github.com:zhlu9890/ontology_api.git"
-    GIT_COMMIT_HASH = "90866d13643b035d4ec4ce241e96822499bf301e"
+    GIT_COMMIT_HASH = "f22597038fd215ed4323aa4cfa2256343db5f82b"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -845,6 +845,8 @@ class OntologyAPI:
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN get_term_by_name
+        if "ancestor_term" not in GetTermByNameParams:
+            GetTermByNameParams["ancestor_term"]=""
         validated_params=misc.validate_params(GetTermByNameParams, 'get_term_by_name')
         results = re_api.query("get_term_by_name", validated_params)
 
