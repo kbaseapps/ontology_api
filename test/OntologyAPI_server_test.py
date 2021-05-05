@@ -175,9 +175,9 @@ class OntologyAPITest(unittest.TestCase):
         self.assertTrue(set(["ENVO:00002985", "ENVO:01000558"]).issubset(set(returnVal)))
 
     def test_envo_get_terms(self):
-        ret = self.serviceImpl.get_terms(self.ctx, {"ids": ["ENVO:00002041", "ENVO:00002006"], "ns": "envo_ontology"})
-        returnVal=list(map(lambda x: x["id"], ret[0]["results"]))
-        self.assertTrue(set(["ENVO:00002041", "ENVO:00002006"]).issubset(set(returnVal)))
+        ret = self.serviceImpl.get_terms(self.ctx, {"ids": ["ENVO:00002041", "ENVO:00002006", "abcd"], "ns": "envo_ontology"})
+        returnVal=list(map(lambda x: x["id"] if x is not None else None, ret[0]["results"]))
+        self.assertTrue(["ENVO:00002041", "ENVO:00002006", None] == returnVal)
 
     def test_envo_get_associated_samples(self):
         ret = self.serviceImpl.get_associated_samples(self.ctx, {"id": "ENVO:01000221", "ns": "envo_ontology"})
