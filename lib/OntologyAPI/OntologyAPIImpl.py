@@ -23,9 +23,9 @@ class OntologyAPI:
     # state. A method could easily clobber the state set by another while
     # the latter method is running.
     ######################################### noqa
-    VERSION = "0.3.14"
+    VERSION = "0.3.15"
     GIT_URL = "git@github.com:zhlu9890/ontology_api.git"
-    GIT_COMMIT_HASH = "f22597038fd215ed4323aa4cfa2256343db5f82b"
+    GIT_COMMIT_HASH = "f3fa4978d97069223511949f4ee2f29b6ffd1a3b"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -322,10 +322,13 @@ class OntologyAPI:
 
         returnVal={"stats": results["stats"], "ts": validated_params["ts"], "ns": validated_params["ns"]}
         if results.get('error'):
-            returnVal["results"]=[]
+            returnVal["results"]=[None] * len(validated_params["ids"])
             returnVal["error"]=results.get('error')
         else:
-            returnVal["results"]=results["results"]
+            d = {}
+            for r in results["results"]:
+                d[r["id"]] = r
+            returnVal["results"]=list(map(lambda x: d.get(x), validated_params["ids"]))
         #END get_terms
 
         # At some point might do deeper type checking...
